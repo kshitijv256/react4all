@@ -3,7 +3,7 @@ import Form from "./components/Form";
 
 function App() {
   return (
-    <div className="flex h-full bg-gray-200 items-center">
+    <div className="flex min-h-screen h-full bg-gray-200 items-center">
       <Form />
     </div>
   );
