@@ -6,30 +6,35 @@ const formItems = [
     id: 1,
     label: "First Name",
     type: "text",
+    value: "",
     placeholder: "Enter your first name",
   },
   {
     id: 2,
     label: "Last Name",
     type: "text",
+    value: "",
     placeholder: "Enter your last name",
   },
   {
     id: 3,
     label: "Email",
     type: "email",
+    value: "",
     placeholder: "Enter your email",
   },
   {
     id: 4,
     label: "Phone Number",
     type: "tel",
+    value: "",
     placeholder: "Enter your phone number",
   },
   {
     id: 5,
     label: "Date of Birth",
     type: "date",
+    value: "",
     placeholder: "Enter your date of birth",
   },
 ];
@@ -45,6 +50,7 @@ export default function Form(props: { closeFormCB: () => void }) {
         id: Number(new Date()),
         label: fieldValue,
         type: "text",
+        value: "",
         placeholder: "",
       },
     ]);
@@ -53,6 +59,19 @@ export default function Form(props: { closeFormCB: () => void }) {
   const removeField = (id: number) => {
     setFormState(formState.filter((item) => item.id !== id));
   };
+  const changedCB = (value: any, id: number) => {
+    setFormState(
+      formState.map((item) => {
+        if (item.id === id) {
+          return { ...item, value };
+        }
+        return item;
+      })
+    );
+  };
+  const resetForm = () => {
+    setFormState(formItems);
+  };
 
   return (
     <div className="flex flex-col gap-4 p-2 divide-y divide-double divide-gray-300">
@@ -60,6 +79,7 @@ export default function Form(props: { closeFormCB: () => void }) {
         {formState.map((item) => (
           <InputField
             removeField={removeField}
+            changedCB={changedCB}
             item={item}
             key={item.id}
             id={item.id}
@@ -91,6 +111,12 @@ export default function Form(props: { closeFormCB: () => void }) {
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
         >
           Close Form
+        </button>
+        <button
+          onClick={resetForm}
+          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+        >
+          Reset Form
         </button>
       </div>
     </div>
