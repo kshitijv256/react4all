@@ -5,7 +5,7 @@ export default function Home(props: { openFormCB: () => void }) {
     <div className="p-4 mx-auto bg-white rounded-xl flex flex-col">
       <button
         onClick={props.openFormCB}
-        className="p-2 bg-cyan-400 rounded-lg text-white"
+        className="p-2 bg-cyan-500 rounded-lg text-white"
       >
         Open Form
       </button>
