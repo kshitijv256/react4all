@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "./InputField";
 
 interface FormItem {
@@ -62,6 +62,13 @@ const getFormData: () => FormItem[] = () => {
 export default function Form(props: { closeFormCB: () => void }) {
   const [formState, setFormState] = useState(() => getFormData());
   const [fieldValue, setFieldValue] = useState("");
+  useEffect(() => {
+    const oldTitle = document.title;
+    document.title = "Form Builder";
+    return () => {
+      document.title = oldTitle;
+    };
+  }, []);
 
   const addField = () => {
     setFormState([
