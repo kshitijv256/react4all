@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import InputField from "./InputField";
 
-const formItems = [
+interface FormItem {
+  id: number;
+  label: string;
+  type: string;
+  value: any;
+  placeholder: string;
+}
+
+const formItems: FormItem[] = [
   {
     id: 1,
     label: "First Name",
@@ -39,8 +47,20 @@ const formItems = [
   },
 ];
 
+const saveFormData = (data: any) => {
+  localStorage.setItem("forms", JSON.stringify(data));
+};
+
+const getFormData: () => FormItem[] = () => {
+  const data = localStorage.getItem("forms");
+  if (data) {
+    return JSON.parse(data);
+  }
+  return formItems;
+};
+
 export default function Form(props: { closeFormCB: () => void }) {
-  const [formState, setFormState] = useState(formItems);
+  const [formState, setFormState] = useState(() => getFormData());
   const [fieldValue, setFieldValue] = useState("");
 
   const addField = () => {
@@ -103,8 +123,13 @@ export default function Form(props: { closeFormCB: () => void }) {
         </button>
       </div>
       <div className="flex flex-row gap-2 pt-2">
-        <button className="bg-cyan-500 text-white p-2 rounded-md w-fit">
-          Submit
+        <button
+          onClick={() => {
+            saveFormData(formState);
+          }}
+          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+        >
+          Save Form
         </button>
         <button
           onClick={props.closeFormCB}
