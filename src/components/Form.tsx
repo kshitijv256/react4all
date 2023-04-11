@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import InputField from "./InputField";
 
+interface MyForm {
+  id: number;
+  title: string;
+  fields: FormItem[];
+}
+
 interface FormItem {
   id: number;
   label: string;
@@ -51,17 +57,22 @@ const saveFormData = (data: any) => {
   localStorage.setItem("forms", JSON.stringify(data));
 };
 
-const getFormData: () => FormItem[] = () => {
+const getFormData: () => MyForm = () => {
   const data = localStorage.getItem("forms");
   if (data) {
     return JSON.parse(data);
   }
-  return formItems;
+  return {
+    id: Number(new Date()),
+    title: "Form",
+    fields: formItems,
+  };
 };
 
 export default function Form(props: { closeFormCB: () => void }) {
   const [formState, setFormState] = useState(() => getFormData());
   const [fieldValue, setFieldValue] = useState("");
+  // const [titleValue, setTitleValue] = useState("");
   useEffect(() => {
     const oldTitle = document.title;
     document.title = "Form Builder";
@@ -70,40 +81,56 @@ export default function Form(props: { closeFormCB: () => void }) {
     };
   }, []);
 
+  useEffect(() => {
+    let timeout = setTimeout(() => {
+      saveFormData(formState);
+    }, 1000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [formState]);
+
   const addField = () => {
-    setFormState([
+    setFormState({
       ...formState,
-      {
-        id: Number(new Date()),
-        label: fieldValue,
-        type: "text",
-        value: "",
-        placeholder: "",
-      },
-    ]);
+      fields: [
+        ...formState.fields,
+        {
+          id: Number(new Date()),
+          value: "",
+          label: fieldValue,
+          type: "text",
+          placeholder: "",
+        },
+      ],
+    });
     setFieldValue("");
   };
   const removeField = (id: number) => {
-    setFormState(formState.filter((item) => item.id !== id));
+    setFormState({
+      ...formState,
+      fields: formState.fields.filter((item) => item.id !== id),
+    });
   };
   const changedCB = (value: any, id: number) => {
-    setFormState(
-      formState.map((item) => {
+    setFormState({
+      ...formState,
+      fields: formState.fields.map((item) => {
         if (item.id === id) {
           return { ...item, value };
         }
         return item;
-      })
-    );
+      }),
+    });
   };
   const resetForm = () => {
-    setFormState(formItems);
+    setFormState({ ...formState, fields: formItems });
   };
 
   return (
     <div className="flex flex-col gap-4 p-2 divide-y divide-double divide-gray-300">
       <div className="flex-1">
-        {formState.map((item) => (
+        {formState.fields.map((item) => (
           <InputField
             removeField={removeField}
             changedCB={changedCB}
