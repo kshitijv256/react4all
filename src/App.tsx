@@ -3,14 +3,6 @@ import Form from "./components/Form";
 import Header from "./components/Header";
 import Home from "./components/Home";
 
-const getForms = () => {
-  const forms = localStorage.getItem("forms");
-  if (forms) {
-    return JSON.parse(forms);
-  }
-  return [];
-};
-
 function App() {
   const [state, setState] = useState(0);
   const openForm = (id: number) => {
