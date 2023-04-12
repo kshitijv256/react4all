@@ -8,7 +8,7 @@ const getForms = () => {
   return [];
 };
 
-export default function Home(props: { openFormCB: () => void }) {
+export default function Home(props: { openFormCB: (id: number) => void }) {
   const [forms, setForms] = useState(() => getForms());
   return (
     <div className="p-4 mx-auto bg-white rounded-xl flex flex-col">
@@ -16,16 +16,15 @@ export default function Home(props: { openFormCB: () => void }) {
         return (
           <div className="p-3">
             <h1 className="text-xl font-semibold">{form.title}</h1>
-            <button>Open Form</button>
+            <button
+              onClick={() => props.openFormCB(form.id)}
+              className="p-2 bg-cyan-500 rounded-lg text-white"
+            >
+              Open Form
+            </button>
           </div>
         );
       })}
-      <button
-        onClick={props.openFormCB}
-        className="p-2 bg-cyan-500 rounded-lg text-white"
-      >
-        Open Form
-      </button>
     </div>
   );
 }

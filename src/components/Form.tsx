@@ -79,7 +79,7 @@ const getFormData: () => MyForm[] = () => {
   ];
 };
 
-export default function Form(props: { closeFormCB: () => void }) {
+export default function Form(props: { closeFormCB: () => void; id: number }) {
   const [formState, setFormState] = useState(() => getFormData());
   const [fieldValue, setFieldValue] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
@@ -105,7 +105,7 @@ export default function Form(props: { closeFormCB: () => void }) {
   const addField = () => {
     setFormState(
       formState.map((item) => {
-        if (item.id === formState[0].id) {
+        if (item.id === props.id) {
           return {
             ...item,
             fields: [
@@ -129,10 +129,12 @@ export default function Form(props: { closeFormCB: () => void }) {
   const removeField = (id: number) => {
     setFormState(
       formState.map((form) => {
-        if (form.id === formState[0].id) {
+        if (form.id === props.id) {
           return {
             ...form,
-            fields: formState[0].fields.filter((item) => item.id !== id),
+            fields: formState
+              .filter((item) => item.id === props.id)[0]
+              .fields.filter((item) => item.id !== id),
           };
         } else {
           return form;
@@ -143,19 +145,21 @@ export default function Form(props: { closeFormCB: () => void }) {
   const changedCB = (value: any, id: number) => {
     setFormState(
       formState.map((form) => {
-        if (form.id === formState[0].id) {
+        if (form.id === props.id) {
           return {
             ...form,
-            fields: formState[0].fields.map((item) => {
-              if (item.id === id) {
-                return {
-                  ...item,
-                  value: value,
-                };
-              } else {
-                return item;
-              }
-            }),
+            fields: formState
+              .filter((item1) => item1.id === props.id)[0]
+              .fields.map((item) => {
+                if (item.id === id) {
+                  return {
+                    ...item,
+                    value: value,
+                  };
+                } else {
+                  return item;
+                }
+              }),
           };
         } else {
           return form;
@@ -167,15 +171,17 @@ export default function Form(props: { closeFormCB: () => void }) {
   const resetForm = () => {
     setFormState(
       formState.map((form) => {
-        if (form.id === formState[0].id) {
+        if (form.id === props.id) {
           return {
             ...form,
-            fields: formState[0].fields.map((item) => {
-              return {
-                ...item,
-                value: "",
-              };
-            }),
+            fields: formState
+              .filter((item) => item.id === props.id)[0]
+              .fields.map((item) => {
+                return {
+                  ...item,
+                  value: "",
+                };
+              }),
           };
         } else {
           return form;
@@ -190,11 +196,11 @@ export default function Form(props: { closeFormCB: () => void }) {
         <label className="text-sm font-semibold py-2">Title</label>
         <input
           type="text"
-          value={formState[0].title}
+          value={formState.find((item) => item.id === props.id)?.title}
           onChange={(e) => {
             setFormState(
               formState.map((item) => {
-                if (item.id === formState[0].id) {
+                if (item.id === props.id) {
                   return {
                     ...item,
                     title: e.target.value,
@@ -208,15 +214,17 @@ export default function Form(props: { closeFormCB: () => void }) {
           ref={titleRef}
           className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
         />
-        {formState[0].fields.map((item) => (
-          <InputField
-            removeField={removeField}
-            changedCB={changedCB}
-            item={item}
-            key={item.id}
-            id={item.id}
-          />
-        ))}
+        {formState
+          .filter((item) => item.id === props.id)[0]
+          .fields.map((item) => (
+            <InputField
+              removeField={removeField}
+              changedCB={changedCB}
+              item={item}
+              key={item.id}
+              id={item.id}
+            />
+          ))}
       </div>
       <div className="flex gap-2 pt-4">
         <input
