@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputField from "./InputField";
 
 interface MyForm {
@@ -57,25 +57,37 @@ const saveFormData = (data: any) => {
   localStorage.setItem("forms", JSON.stringify(data));
 };
 
-const getFormData: () => MyForm = () => {
+const getMyForms: () => MyForm[] = () => {
   const data = localStorage.getItem("forms");
   if (data) {
     return JSON.parse(data);
   }
-  return {
-    id: Number(new Date()),
-    title: "Form",
-    fields: formItems,
-  };
+  return [];
+};
+
+const getFormData: () => MyForm[] = () => {
+  const data = getMyForms();
+  if (data.length > 0) {
+    return data;
+  }
+  return [
+    {
+      id: Number(new Date()),
+      title: "Untitled Form",
+      fields: formItems,
+    },
+  ];
 };
 
 export default function Form(props: { closeFormCB: () => void }) {
   const [formState, setFormState] = useState(() => getFormData());
   const [fieldValue, setFieldValue] = useState("");
-  // const [titleValue, setTitleValue] = useState("");
+  const titleRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
+    console.log("Component mounted");
     const oldTitle = document.title;
     document.title = "Form Builder";
+    titleRef.current?.focus();
     return () => {
       document.title = oldTitle;
     };
@@ -91,46 +103,112 @@ export default function Form(props: { closeFormCB: () => void }) {
   }, [formState]);
 
   const addField = () => {
-    setFormState({
-      ...formState,
-      fields: [
-        ...formState.fields,
-        {
-          id: Number(new Date()),
-          value: "",
-          label: fieldValue,
-          type: "text",
-          placeholder: "",
-        },
-      ],
-    });
+    setFormState(
+      formState.map((item) => {
+        if (item.id === formState[0].id) {
+          return {
+            ...item,
+            fields: [
+              ...item.fields,
+              {
+                id: Number(new Date()),
+                label: fieldValue,
+                type: "text",
+                value: "",
+                placeholder: "",
+              },
+            ],
+          };
+        } else {
+          return item;
+        }
+      })
+    );
     setFieldValue("");
   };
   const removeField = (id: number) => {
-    setFormState({
-      ...formState,
-      fields: formState.fields.filter((item) => item.id !== id),
-    });
+    setFormState(
+      formState.map((form) => {
+        if (form.id === formState[0].id) {
+          return {
+            ...form,
+            fields: formState[0].fields.filter((item) => item.id !== id),
+          };
+        } else {
+          return form;
+        }
+      })
+    );
   };
   const changedCB = (value: any, id: number) => {
-    setFormState({
-      ...formState,
-      fields: formState.fields.map((item) => {
-        if (item.id === id) {
-          return { ...item, value };
+    setFormState(
+      formState.map((form) => {
+        if (form.id === formState[0].id) {
+          return {
+            ...form,
+            fields: formState[0].fields.map((item) => {
+              if (item.id === id) {
+                return {
+                  ...item,
+                  value: value,
+                };
+              } else {
+                return item;
+              }
+            }),
+          };
+        } else {
+          return form;
         }
-        return item;
-      }),
-    });
+      })
+    );
   };
+
   const resetForm = () => {
-    setFormState({ ...formState, fields: formItems });
+    setFormState(
+      formState.map((form) => {
+        if (form.id === formState[0].id) {
+          return {
+            ...form,
+            fields: formState[0].fields.map((item) => {
+              return {
+                ...item,
+                value: "",
+              };
+            }),
+          };
+        } else {
+          return form;
+        }
+      })
+    );
   };
 
   return (
     <div className="flex flex-col gap-4 p-2 divide-y divide-double divide-gray-300">
       <div className="flex-1">
-        {formState.fields.map((item) => (
+        <label className="text-sm font-semibold py-2">Title</label>
+        <input
+          type="text"
+          value={formState[0].title}
+          onChange={(e) => {
+            setFormState(
+              formState.map((item) => {
+                if (item.id === formState[0].id) {
+                  return {
+                    ...item,
+                    title: e.target.value,
+                  };
+                } else {
+                  return item;
+                }
+              })
+            );
+          }}
+          ref={titleRef}
+          className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
+        />
+        {formState[0].fields.map((item) => (
           <InputField
             removeField={removeField}
             changedCB={changedCB}
