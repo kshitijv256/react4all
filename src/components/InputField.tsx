@@ -1,5 +1,5 @@
 import React from "react";
-import deleteIcon from "../delete.svg";
+import deleteIcon from "../assets/delete.svg";
 
 export default function InputField(props: {
   item: { label: string; type: string; placeholder: string; value: any };

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import InputField from "./InputField";
 import { MyForm, formItems } from "./data";
+import resetIcon from "../assets/reset.svg";
+import closeIcon from "../assets/logout.svg";
 
 const saveFormData = (data: any) => {
   localStorage.setItem("forms", JSON.stringify(data));
@@ -204,13 +206,13 @@ export default function Form(props: { closeFormCB: () => void; id: number }) {
           onClick={props.closeFormCB}
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
         >
-          Close Form
+          <img src={closeIcon} alt="delete" className="w-8" />
         </button>
         <button
           onClick={resetForm}
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
         >
-          Reset Form
+          <img src={resetIcon} alt="delete" className="w-8" />
         </button>
       </div>
     </div>
