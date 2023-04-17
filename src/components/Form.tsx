@@ -3,6 +3,7 @@ import InputField from "./InputField";
 import { MyForm, formItems } from "./data";
 import resetIcon from "../assets/reset.svg";
 import closeIcon from "../assets/logout.svg";
+import { Link } from "raviger";
 
 const saveFormData = (data: any) => {
   localStorage.setItem("forms", JSON.stringify(data));
@@ -30,7 +31,7 @@ const getFormData: () => MyForm[] = () => {
   ];
 };
 
-export default function Form(props: { closeFormCB: () => void; id: number }) {
+export default function Form(props: { id: number }) {
   const [formState, setFormState] = useState(() => getFormData());
   const [fieldValue, setFieldValue] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
@@ -202,12 +203,9 @@ export default function Form(props: { closeFormCB: () => void; id: number }) {
         >
           Save Form
         </button>
-        <button
-          onClick={props.closeFormCB}
-          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
-        >
+        <Link href="/" className="bg-cyan-500 text-white p-2 rounded-md w-fit">
           <img src={closeIcon} alt="delete" className="w-8" />
-        </button>
+        </Link>
         <button
           onClick={resetForm}
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
