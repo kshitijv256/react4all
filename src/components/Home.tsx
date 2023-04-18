@@ -80,6 +80,12 @@ export default function Home() {
                 >
                   <img src={editIcon} alt="open" className="w-8" />
                 </Link>
+                <Link
+                  href={`/preview/${form.id}`}
+                  className="p-2 bg-cyan-500 rounded-lg text-white"
+                >
+                  preview
+                </Link>
                 <button
                   onClick={() => deleteForm(form.id)}
                   className="p-2 bg-cyan-500 rounded-lg text-white"
