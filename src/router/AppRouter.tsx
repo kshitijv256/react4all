@@ -3,9 +3,11 @@ import Home from "../components/Home";
 import Form from "../components/Form";
 import { useRoutes } from "raviger";
 import Preview from "../components/Preview";
+import About from "../components/About";
 
 const routes = {
   "/": () => <Home />,
+  "/about": () => <About />,
   "/form/:id": ({ id }: { id: string }) => <Form id={Number(id)} />,
   "/preview/:formId": ({ formId }: { formId: string }) => (
     <Preview formId={Number(formId)} />

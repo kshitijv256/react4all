@@ -33,6 +33,7 @@ const getFormData: () => MyForm[] = () => {
 
 export default function Form(props: { id: number }) {
   const [formState, setFormState] = useState(() => getFormData());
+  const [state, setState] = useState(props.id);
   const [fieldValue, setFieldValue] = useState("");
   const [type, setType] = useState("text");
   const titleRef = useRef<HTMLInputElement>(null);

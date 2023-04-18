@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { MyForm, formItems } from "./data";
 import deleteIcon from "../assets/delete.svg";
 import editIcon from "../assets/login.svg";
+import previewIcon from "../assets/preview.svg";
+import searchIcon from "../assets/search.svg";
 import { Link } from "raviger";
 import { useQueryParams } from "raviger";
 
@@ -60,11 +62,8 @@ export default function Home() {
             placeholder="Search"
             ref={searchRef}
           />
-          <button
-            className="bg-cyan-500 text-white p-2 rounded-md w-fit"
-            // onClick={(_) => props.removeField(props.id)}
-          >
-            Find
+          <button className="bg-cyan-500 text-white p-2 rounded-md w-fit">
+            <img src={searchIcon} alt="search" className="w-8" />
           </button>
         </div>
       </form>
@@ -81,16 +80,16 @@ export default function Home() {
               <h1 className="text-xl font-semibold">{form.title}</h1>
               <div className="flex gap-2">
                 <Link
+                  href={`/preview/${form.id}`}
+                  className="p-2 bg-cyan-500 rounded-lg text-white"
+                >
+                  <img src={previewIcon} alt="open preview" className="w-8" />
+                </Link>
+                <Link
                   href={`/form/${form.id}`}
                   className="p-2 bg-cyan-500 rounded-lg text-white"
                 >
                   <img src={editIcon} alt="open" className="w-8" />
-                </Link>
-                <Link
-                  href={`/preview/${form.id}`}
-                  className="p-2 bg-cyan-500 rounded-lg text-white"
-                >
-                  preview
                 </Link>
                 <button
                   onClick={() => deleteForm(form.id)}
