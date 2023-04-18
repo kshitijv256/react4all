@@ -49,3 +49,12 @@ export const formItems: FormItem[] = [
     placeholder: "Enter your date of birth",
   },
 ];
+
+export const inputOptions = [
+  { value: "text", label: "Text" },
+  { value: "email", label: "Email" },
+  { value: "tel", label: "Phone" },
+  { value: "date", label: "Date" },
+  { value: "number", label: "Number" },
+  { value: "password", label: "Password" },
+];

@@ -75,7 +75,7 @@ export default function Home() {
         .map((form: MyForm) => {
           return (
             <div
-              className="p-3 flex items-center justify-between"
+              className="py-3 flex items-center justify-between"
               key={form.id}
             >
               <h1 className="text-xl font-semibold">{form.title}</h1>
