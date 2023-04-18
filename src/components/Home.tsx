@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MyForm, formItems } from "./data";
 import deleteIcon from "../assets/delete.svg";
 import editIcon from "../assets/login.svg";
@@ -20,6 +20,11 @@ export default function Home() {
   const [forms, setForms] = useState(() => getForms());
   const [{ search }, setQuery] = useQueryParams();
   const [searchText, setSearchText] = useState(search || "");
+
+  const searchRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    searchRef.current?.focus();
+  }, []);
 
   // TODO: Add new route for new form
   const addForm = () => {
@@ -53,6 +58,7 @@ export default function Home() {
               setSearchText(e.target.value);
             }}
             placeholder="Search"
+            ref={searchRef}
           />
           <button
             className="bg-cyan-500 text-white p-2 rounded-md w-fit"
