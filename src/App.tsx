@@ -5,7 +5,7 @@ import { Link } from "raviger";
 
 function App() {
   return (
-    <div className="flex flex-col min-h-screen h-full bg-gray-200 items-center">
+    <div className="flex flex-col min-h-screen bg-gray-200 items-center">
       <div className="flex bg-gray-200 w-full px-2 justify-end">
         <Link href="/">
           <div className="p-2 hover:bg-cyan-300">Home</div>

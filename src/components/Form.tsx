@@ -5,7 +5,7 @@ import closeIcon from "../assets/logout.svg";
 import { Link } from "raviger";
 import InputLabel from "./InputLabel";
 
-const saveFormData = (data: any) => {
+const saveFormData = (data: MyForm[]) => {
   localStorage.setItem("forms", JSON.stringify(data));
 };
 
