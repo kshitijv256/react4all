@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MyForm, formItems, inputOptions } from "./data";
+import { MyForm, formItems, inputOptions, textFieldTypes } from "../types/data";
 import resetIcon from "../assets/reset.svg";
 import closeIcon from "../assets/logout.svg";
 import { Link } from "raviger";
@@ -64,9 +64,10 @@ export default function Form(props: { id: number }) {
             fields: [
               ...item.fields,
               {
+                kind: "text",
                 id: Number(new Date()),
                 label: fieldValue,
-                type: type,
+                type: type as textFieldTypes,
                 value: "",
                 placeholder: "",
               },

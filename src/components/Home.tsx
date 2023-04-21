@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MyForm, formItems } from "./data";
+import { MyForm, formItems } from "../types/data";
 import deleteIcon from "../assets/delete.svg";
 import editIcon from "../assets/login.svg";
 import previewIcon from "../assets/preview.svg";
 import searchIcon from "../assets/search.svg";
-import { Link } from "raviger";
-import { useQueryParams } from "raviger";
+import { Link, useQueryParams } from "raviger";
 
 const getForms = () => {
   const forms = localStorage.getItem("forms");

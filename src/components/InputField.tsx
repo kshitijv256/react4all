@@ -1,9 +1,9 @@
 import React from "react";
 import deleteIcon from "../assets/delete.svg";
-import { FormItem } from "./data";
+import { textField } from "../types/data";
 
 export default function InputField(props: {
-  item: FormItem;
+  item: textField;
   removeField: (id: number) => void;
   changedCB: (value: any, id: number) => void;
   id: number;

@@ -1,6 +1,6 @@
 import React from "react";
 import deleteIcon from "../assets/delete.svg";
-import { FormItem } from "./data";
+import { FormItem } from "../types/data";
 
 export default function InputLabel(props: {
   item: FormItem;

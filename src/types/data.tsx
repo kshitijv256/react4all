@@ -1,19 +1,34 @@
-export interface MyForm {
+export type MyForm = {
   id: number;
   title: string;
   fields: FormItem[];
-}
+};
 
-export interface FormItem {
+export type textFieldTypes = "text" | "email" | "tel" | "date" | "number";
+
+export type textField = {
+  kind: "text";
   id: number;
   label: string;
-  type: string;
-  value: any;
+  type: textFieldTypes;
+  value: string;
   placeholder: string;
-}
+};
+
+export type selectField = {
+  kind: "select";
+  id: number;
+  label: string;
+  value: string;
+  options: string[];
+  placeholder: string;
+};
+
+export type FormItem = textField | selectField;
 
 export const formItems: FormItem[] = [
   {
+    kind: "text",
     id: 1,
     label: "First Name",
     type: "text",
@@ -21,6 +36,7 @@ export const formItems: FormItem[] = [
     placeholder: "Enter your first name",
   },
   {
+    kind: "text",
     id: 2,
     label: "Last Name",
     type: "text",
@@ -28,6 +44,7 @@ export const formItems: FormItem[] = [
     placeholder: "Enter your last name",
   },
   {
+    kind: "text",
     id: 3,
     label: "Email",
     type: "email",
@@ -35,6 +52,7 @@ export const formItems: FormItem[] = [
     placeholder: "Enter your email",
   },
   {
+    kind: "text",
     id: 4,
     label: "Phone Number",
     type: "tel",
@@ -42,6 +60,7 @@ export const formItems: FormItem[] = [
     placeholder: "Enter your phone number",
   },
   {
+    kind: "text",
     id: 5,
     label: "Date of Birth",
     type: "date",
@@ -56,5 +75,4 @@ export const inputOptions = [
   { value: "tel", label: "Phone" },
   { value: "date", label: "Date" },
   { value: "number", label: "Number" },
-  { value: "password", label: "Password" },
 ];
