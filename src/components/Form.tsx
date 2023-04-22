@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import InputField from "./InputField";
-import { MyForm, formItems } from "./data";
+import { FormItem, MyForm, formItems, inputOptions } from "../types/data";
 import resetIcon from "../assets/reset.svg";
 import closeIcon from "../assets/logout.svg";
+import { Link } from "raviger";
+import InputLabel from "./InputLabel";
+import DropdownLabel from "./DropdownLabel";
+import RadioLabel from "./RadioLabel";
 
-const saveFormData = (data: any) => {
+const saveFormData = (data: MyForm[]) => {
   localStorage.setItem("forms", JSON.stringify(data));
 };
 
@@ -30,9 +33,10 @@ const getFormData: () => MyForm[] = () => {
   ];
 };
 
-export default function Form(props: { closeFormCB: () => void; id: number }) {
+export default function Form(props: { id: number }) {
   const [formState, setFormState] = useState(() => getFormData());
   const [fieldValue, setFieldValue] = useState("");
+  const [type, setType] = useState("text");
   const titleRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     console.log("Component mounted");
@@ -53,22 +57,53 @@ export default function Form(props: { closeFormCB: () => void; id: number }) {
     };
   }, [formState]);
 
+  const getField = () => {
+    if (type === "dropdown") {
+      return {
+        kind: "dropdown",
+        id: Number(new Date()),
+        label: fieldValue,
+        value: "",
+        options: [],
+        placeholder: "",
+      } as FormItem;
+    }
+    if (type === "textarea") {
+      return {
+        kind: "textarea",
+        id: Number(new Date()),
+        label: fieldValue,
+        value: "",
+        placeholder: "",
+      } as FormItem;
+    }
+    if (type === "radio") {
+      return {
+        kind: "radio",
+        id: Number(new Date()),
+        label: fieldValue,
+        value: "",
+        options: [],
+        placeholder: "",
+      } as FormItem;
+    }
+    return {
+      kind: "text",
+      id: Number(new Date()),
+      label: fieldValue,
+      type: type,
+      value: "",
+      placeholder: "",
+    } as FormItem;
+  };
+
   const addField = () => {
     setFormState(
       formState.map((item) => {
         if (item.id === props.id) {
           return {
             ...item,
-            fields: [
-              ...item.fields,
-              {
-                id: Number(new Date()),
-                label: fieldValue,
-                type: "text",
-                value: "",
-                placeholder: "",
-              },
-            ],
+            fields: [...item.fields, getField()],
           };
         } else {
           return item;
@@ -93,7 +128,7 @@ export default function Form(props: { closeFormCB: () => void; id: number }) {
       })
     );
   };
-  const changedCB = (value: any, id: number) => {
+  const changedCB = (newForm: FormItem, id: number) => {
     setFormState(
       formState.map((form) => {
         if (form.id === props.id) {
@@ -103,10 +138,7 @@ export default function Form(props: { closeFormCB: () => void; id: number }) {
               .filter((item1) => item1.id === props.id)[0]
               .fields.map((item) => {
                 if (item.id === id) {
-                  return {
-                    ...item,
-                    value: value,
-                  };
+                  return newForm;
                 } else {
                   return item;
                 }
@@ -141,10 +173,44 @@ export default function Form(props: { closeFormCB: () => void; id: number }) {
     );
   };
 
+  const getLabel = (item: FormItem) => {
+    if (item.kind === "dropdown") {
+      return (
+        <DropdownLabel
+          removeFieldCB={removeField}
+          changedCB={changedCB}
+          item={item}
+          key={item.id}
+          id={item.id}
+        />
+      );
+    }
+    if (item.kind === "radio") {
+      return (
+        <RadioLabel
+          removeFieldCB={removeField}
+          changedCB={changedCB}
+          item={item}
+          key={item.id}
+          id={item.id}
+        />
+      );
+    }
+    return (
+      <InputLabel
+        removeFieldCB={removeField}
+        changedCB={changedCB}
+        item={item}
+        key={item.id}
+        id={item.id}
+      />
+    );
+  };
+
   return (
     <div className="flex flex-col gap-4 p-2 divide-y divide-double divide-gray-300">
       <div className="flex-1">
-        <label className="text-sm font-semibold py-2">Title</label>
+        <label className="text-sm font-semibold">Title</label>
         <input
           type="text"
           value={formState.find((item) => item.id === props.id)?.title}
@@ -163,19 +229,14 @@ export default function Form(props: { closeFormCB: () => void; id: number }) {
             );
           }}
           ref={titleRef}
-          className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
+          className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full mt-2"
         />
-        {formState
-          .filter((item) => item.id === props.id)[0]
-          .fields.map((item) => (
-            <InputField
-              removeField={removeField}
-              changedCB={changedCB}
-              item={item}
-              key={item.id}
-              id={item.id}
-            />
-          ))}
+        <div className="flex flex-col gap-4 mt-4">
+          <h2 className="font-semibold">Questions</h2>
+          {formState
+            .filter((item) => item.id === props.id)[0]
+            .fields.map((item) => getLabel(item))}
+        </div>
       </div>
       <div className="flex gap-2 pt-4">
         <input
@@ -184,8 +245,23 @@ export default function Form(props: { closeFormCB: () => void; id: number }) {
             setFieldValue(e.target.value);
           }}
           value={fieldValue}
-          className="flex-1 border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none"
+          className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none"
         />
+        <div className="border-0 inline-flex w-fit px-2 bg-gray-100 justify-center rounded-md text-sm font-semibold text-gray-900">
+          <select
+            className="bg-gray-100 focus:outline-none"
+            value={type}
+            onChange={(e) => {
+              setType(e.target.value);
+            }}
+          >
+            {inputOptions.map((item) => (
+              <option key={item.label} value={item.value} className="">
+                {item.label}
+              </option>
+            ))}
+          </select>
+        </div>
         <button
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
           onClick={addField}
@@ -202,12 +278,9 @@ export default function Form(props: { closeFormCB: () => void; id: number }) {
         >
           Save Form
         </button>
-        <button
-          onClick={props.closeFormCB}
-          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
-        >
+        <Link href="/" className="bg-cyan-500 text-white p-2 rounded-md w-fit">
           <img src={closeIcon} alt="delete" className="w-8" />
-        </button>
+        </Link>
         <button
           onClick={resetForm}
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"

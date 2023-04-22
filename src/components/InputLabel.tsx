@@ -1,29 +1,28 @@
 import React from "react";
 import deleteIcon from "../assets/delete.svg";
-import { textField } from "../types/data";
+import { FormItem } from "../types/data";
 
-export default function InputField(props: {
-  item: textField;
-  removeField: (id: number) => void;
-  changedCB: (value: any, id: number) => void;
+export default function InputLabel(props: {
+  item: FormItem;
+  removeFieldCB: (id: number) => void;
+  changedCB: (newForm: FormItem, id: number) => void;
   id: number;
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-semibold pt-2">{props.item.label}</label>
       <div className="flex w-full gap-2">
         <input
           className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
-          type={props.item.type}
-          value={props.item.value}
+          type="text"
+          value={props.item.label}
           onChange={(e) => {
-            props.changedCB(e.target.value, props.id);
+            const newForm = { ...props.item, label: e.target.value };
+            props.changedCB(newForm, props.id);
           }}
-          placeholder={props.item.placeholder}
         />
         <button
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
-          onClick={(_) => props.removeField(props.id)}
+          onClick={(_) => props.removeFieldCB(props.id)}
         >
           {<img src={deleteIcon} alt="delete" className="w-8" />}
         </button>
