@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MyForm, formItems, inputOptions, textFieldTypes } from "../types/data";
+import { FormItem, MyForm, formItems, inputOptions } from "../types/data";
 import resetIcon from "../assets/reset.svg";
 import closeIcon from "../assets/logout.svg";
 import { Link } from "raviger";
 import InputLabel from "./InputLabel";
+import DropdownLabel from "./DropdownLabel";
 
 const saveFormData = (data: MyForm[]) => {
   localStorage.setItem("forms", JSON.stringify(data));
@@ -63,14 +64,23 @@ export default function Form(props: { id: number }) {
             ...item,
             fields: [
               ...item.fields,
-              {
-                kind: "text",
-                id: Number(new Date()),
-                label: fieldValue,
-                type: type as textFieldTypes,
-                value: "",
-                placeholder: "",
-              },
+              type !== "dropdown"
+                ? ({
+                    kind: "text",
+                    id: Number(new Date()),
+                    label: fieldValue,
+                    type: type,
+                    value: "",
+                    placeholder: "",
+                  } as FormItem)
+                : ({
+                    kind: "dropdown",
+                    id: Number(new Date()),
+                    label: fieldValue,
+                    value: "",
+                    options: [],
+                    placeholder: "",
+                  } as FormItem),
             ],
           };
         } else {
@@ -96,7 +106,7 @@ export default function Form(props: { id: number }) {
       })
     );
   };
-  const changedCB = (value: any, id: number) => {
+  const changedCB = (newForm: FormItem, id: number) => {
     setFormState(
       formState.map((form) => {
         if (form.id === props.id) {
@@ -106,10 +116,7 @@ export default function Form(props: { id: number }) {
               .filter((item1) => item1.id === props.id)[0]
               .fields.map((item) => {
                 if (item.id === id) {
-                  return {
-                    ...item,
-                    label: value,
-                  };
+                  return newForm;
                 } else {
                   return item;
                 }
@@ -172,15 +179,25 @@ export default function Form(props: { id: number }) {
           <h2 className="font-semibold">Questions</h2>
           {formState
             .filter((item) => item.id === props.id)[0]
-            .fields.map((item) => (
-              <InputLabel
-                removeFieldCB={removeField}
-                changedCB={changedCB}
-                item={item}
-                key={item.id}
-                id={item.id}
-              />
-            ))}
+            .fields.map((item) =>
+              item.kind === "text" ? (
+                <InputLabel
+                  removeFieldCB={removeField}
+                  changedCB={changedCB}
+                  item={item}
+                  key={item.id}
+                  id={item.id}
+                />
+              ) : (
+                <DropdownLabel
+                  removeFieldCB={removeField}
+                  changedCB={changedCB}
+                  item={item}
+                  key={item.id}
+                  id={item.id}
+                />
+              )
+            )}
         </div>
       </div>
       <div className="flex gap-2 pt-4">

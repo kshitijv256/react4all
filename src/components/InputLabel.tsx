@@ -5,7 +5,7 @@ import { FormItem } from "../types/data";
 export default function InputLabel(props: {
   item: FormItem;
   removeFieldCB: (id: number) => void;
-  changedCB: (value: any, id: number) => void;
+  changedCB: (newForm: FormItem, id: number) => void;
   id: number;
 }) {
   return (
@@ -16,9 +16,9 @@ export default function InputLabel(props: {
           type="text"
           value={props.item.label}
           onChange={(e) => {
-            props.changedCB(e.target.value, props.id);
+            const newForm = { ...props.item, label: e.target.value };
+            props.changedCB(newForm, props.id);
           }}
-          placeholder={props.item.placeholder}
         />
         <button
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"

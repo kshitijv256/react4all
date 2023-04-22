@@ -21,16 +21,24 @@ export default function Preview(props: { formId: Number }) {
             <label className="text-sm font-semibold pt-2">
               {form.fields[state].label}
             </label>
-            <input
-              className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
-              type={form.fields[state].type}
-              value={formState[state].value}
-              onChange={(e) => {
-                const newState = [...formState];
-                newState[state].value = e.target.value;
-                setFormState(newState);
-              }}
-            />
+            {form.fields[state].kind === "text" ? (
+              <input
+                className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
+                type={form.fields[state].type}
+                value={formState[state].value}
+                onChange={(e) => {
+                  const newState = [...formState];
+                  newState[state].value = e.target.value;
+                  setFormState(newState);
+                }}
+              />
+            ) : (
+              <select>
+                {form.fields[state].options.map((option: string) => (
+                  <option value={option}>{option}</option>
+                ))}
+              </select>
+            )}
           </div>
         )}
       </div>

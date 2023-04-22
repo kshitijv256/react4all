@@ -4,6 +4,7 @@ import Form from "../components/Form";
 import { useRoutes } from "raviger";
 import Preview from "../components/Preview";
 import About from "../components/About";
+import NotFound from "../components/404page";
 
 const routes = {
   "/": () => <Home />,
@@ -12,6 +13,7 @@ const routes = {
   "/preview/:formId": ({ formId }: { formId: string }) => (
     <Preview formId={Number(formId)} />
   ),
+  "*": () => <NotFound />,
 };
 
 export default function AppRouter() {

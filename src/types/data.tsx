@@ -15,16 +15,16 @@ export type textField = {
   placeholder: string;
 };
 
-export type selectField = {
-  kind: "select";
+export type DropDownField = {
+  kind: "dropdown";
   id: number;
   label: string;
   value: string;
-  options: string[];
+  options: { selected: boolean; value: string }[];
   placeholder: string;
 };
 
-export type FormItem = textField | selectField;
+export type FormItem = textField | DropDownField;
 
 export const formItems: FormItem[] = [
   {
@@ -67,6 +67,18 @@ export const formItems: FormItem[] = [
     value: "",
     placeholder: "Enter your date of birth",
   },
+  {
+    kind: "dropdown",
+    id: 6,
+    label: "Gender",
+    value: "",
+    options: [
+      { selected: false, value: "Male" },
+      { selected: false, value: "Female" },
+      { selected: false, value: "Other" },
+    ],
+    placeholder: "Select Gender",
+  },
 ];
 
 export const inputOptions = [
@@ -75,4 +87,5 @@ export const inputOptions = [
   { value: "tel", label: "Phone" },
   { value: "date", label: "Date" },
   { value: "number", label: "Number" },
+  { value: "dropdown", label: "Dropdown" },
 ];
