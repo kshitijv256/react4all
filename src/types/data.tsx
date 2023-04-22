@@ -24,6 +24,15 @@ export type DropDownField = {
   placeholder: string;
 };
 
+export type RadioField = {
+  kind: "radio";
+  id: number;
+  label: string;
+  value: string;
+  options: string[];
+  placeholder: string;
+};
+
 export type TextAreaField = {
   kind: "textarea";
   id: number;
@@ -32,7 +41,7 @@ export type TextAreaField = {
   placeholder: string;
 };
 
-export type FormItem = textField | DropDownField | TextAreaField;
+export type FormItem = textField | DropDownField | TextAreaField | RadioField;
 
 export const formItems: FormItem[] = [
   {

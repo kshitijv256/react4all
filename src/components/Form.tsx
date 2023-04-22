@@ -5,6 +5,7 @@ import closeIcon from "../assets/logout.svg";
 import { Link } from "raviger";
 import InputLabel from "./InputLabel";
 import DropdownLabel from "./DropdownLabel";
+import RadioLabel from "./RadioLabel";
 
 const saveFormData = (data: MyForm[]) => {
   localStorage.setItem("forms", JSON.stringify(data));
@@ -76,6 +77,16 @@ export default function Form(props: { id: number }) {
         placeholder: "",
       } as FormItem;
     }
+    if (type === "radio") {
+      return {
+        kind: "radio",
+        id: Number(new Date()),
+        label: fieldValue,
+        value: "",
+        options: [],
+        placeholder: "",
+      } as FormItem;
+    }
     return {
       kind: "text",
       id: Number(new Date()),
@@ -85,6 +96,7 @@ export default function Form(props: { id: number }) {
       placeholder: "",
     } as FormItem;
   };
+
   const addField = () => {
     setFormState(
       formState.map((item) => {
@@ -161,6 +173,40 @@ export default function Form(props: { id: number }) {
     );
   };
 
+  const getLabel = (item: FormItem) => {
+    if (item.kind === "dropdown") {
+      return (
+        <DropdownLabel
+          removeFieldCB={removeField}
+          changedCB={changedCB}
+          item={item}
+          key={item.id}
+          id={item.id}
+        />
+      );
+    }
+    if (item.kind === "radio") {
+      return (
+        <RadioLabel
+          removeFieldCB={removeField}
+          changedCB={changedCB}
+          item={item}
+          key={item.id}
+          id={item.id}
+        />
+      );
+    }
+    return (
+      <InputLabel
+        removeFieldCB={removeField}
+        changedCB={changedCB}
+        item={item}
+        key={item.id}
+        id={item.id}
+      />
+    );
+  };
+
   return (
     <div className="flex flex-col gap-4 p-2 divide-y divide-double divide-gray-300">
       <div className="flex-1">
@@ -189,25 +235,7 @@ export default function Form(props: { id: number }) {
           <h2 className="font-semibold">Questions</h2>
           {formState
             .filter((item) => item.id === props.id)[0]
-            .fields.map((item) =>
-              item.kind === "text" || item.kind === "textarea" ? (
-                <InputLabel
-                  removeFieldCB={removeField}
-                  changedCB={changedCB}
-                  item={item}
-                  key={item.id}
-                  id={item.id}
-                />
-              ) : (
-                <DropdownLabel
-                  removeFieldCB={removeField}
-                  changedCB={changedCB}
-                  item={item}
-                  key={item.id}
-                  id={item.id}
-                />
-              )
-            )}
+            .fields.map((item) => getLabel(item))}
         </div>
       </div>
       <div className="flex gap-2 pt-4">

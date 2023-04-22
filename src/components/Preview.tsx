@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { MyForm, FormItem } from "../types/data";
 import DropDown from "./DropDown";
+import { Link } from "raviger";
+import closeIcon from "../assets/close.svg";
+import RadioInput from "./RadioInput";
 
 export default function Preview(props: { formId: number }) {
   const forms = localStorage.getItem("forms") || "[]";
@@ -90,12 +93,18 @@ export default function Preview(props: { formId: number }) {
     if (field.kind === "dropdown") {
       return <DropDown field={form.fields[state]} selectCB={selectOption} />;
     }
+    if (field.kind === "radio") {
+      return <RadioInput field={field} selectCB={(value) => {}} />;
+    }
   };
 
   return (
     <div className="p-4 flex flex-col">
       <div className="flex justify-between items-center">
         <div className="text-2xl font-semibold">{form.title}</div>
+        <Link href="/">
+          <img src={closeIcon} alt="close" className="h-8" />
+        </Link>
       </div>
       <div className="flex flex-col gap-2 mt-4">
         {state >= form.fields.length ? (
