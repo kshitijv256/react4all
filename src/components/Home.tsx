@@ -82,19 +82,19 @@ export default function Home() {
                   href={`/preview/${form.id}`}
                   className="p-2 bg-cyan-500 rounded-lg text-white"
                 >
-                  <img src={previewIcon} alt="open preview" className="w-8" />
+                  <img src={previewIcon} alt="open preview" className="w-6" />
                 </Link>
                 <Link
                   href={`/form/${form.id}`}
                   className="p-2 bg-cyan-500 rounded-lg text-white"
                 >
-                  <img src={editIcon} alt="open" className="w-8" />
+                  <img src={editIcon} alt="open" className="w-6" />
                 </Link>
                 <button
                   onClick={() => deleteForm(form.id)}
                   className="p-2 bg-cyan-500 rounded-lg text-white"
                 >
-                  <img src={deleteIcon} alt="delete" className="w-8" />
+                  <img src={deleteIcon} alt="delete" className="w-6" />
                 </button>
               </div>
             </div>

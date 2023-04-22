@@ -1,12 +1,51 @@
 import React, { useState } from "react";
 import { MyForm, FormItem } from "../types/data";
+import DropDown from "./DropDown";
 
-export default function Preview(props: { formId: Number }) {
-  const forms = localStorage.getItem("forms");
+export default function Preview(props: { formId: number }) {
+  const forms = localStorage.getItem("forms") || "[]";
   const form =
     forms && JSON.parse(forms).find((form: MyForm) => form.id === props.formId);
   const [state, setState] = useState(0);
   const [formState, setFormState] = useState<FormItem[]>(form.fields);
+
+  const saveForm = (newState: FormItem[]) => {
+    const newForms = JSON.parse(forms).map((form: MyForm) => {
+      if (form.id === props.formId) {
+        return {
+          ...form,
+          fields: newState,
+        };
+      } else {
+        return form;
+      }
+    });
+    localStorage.setItem("forms", JSON.stringify(newForms));
+  };
+
+  const selectOption = (selected: boolean, id: number, value: string) => {
+    const newState = formState.map((field) => {
+      if (field.id === id && field.kind === "dropdown") {
+        return {
+          ...field,
+          options: field.options.map((option) => {
+            if (option.value === value) {
+              return {
+                ...option,
+                selected,
+              };
+            } else {
+              return option;
+            }
+          }),
+        };
+      } else {
+        return field;
+      }
+    });
+    setFormState(newState);
+    saveForm(newState);
+  };
 
   return (
     <div className="p-4 flex flex-col">
@@ -18,28 +57,24 @@ export default function Preview(props: { formId: Number }) {
           <div className="text-lg text-center p-4">That's it for now.</div>
         ) : (
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold pt-2">
-              {form.fields[state].label}
-            </label>
             {form.fields[state].kind === "text" ? (
-              <input
-                className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
-                type={form.fields[state].type}
-                value={formState[state].value}
-                onChange={(e) => {
-                  const newState = [...formState];
-                  newState[state].value = e.target.value;
-                  setFormState(newState);
-                }}
-              />
+              <div>
+                <label className="text-sm font-semibold pt-2">
+                  {form.fields[state].label}
+                </label>
+                <input
+                  className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
+                  type={form.fields[state].type}
+                  value={formState[state].value}
+                  onChange={(e) => {
+                    const newState = [...formState];
+                    newState[state].value = e.target.value;
+                    setFormState(newState);
+                  }}
+                />
+              </div>
             ) : (
-              <select>
-                {form.fields[state].options.map(
-                  (option: { selected: string; value: string }) => (
-                    <option value={option.value}>{option.value}</option>
-                  )
-                )}
-              </select>
+              <DropDown field={form.fields[state]} selectCB={selectOption} />
             )}
           </div>
         )}
