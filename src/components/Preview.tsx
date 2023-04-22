@@ -34,9 +34,11 @@ export default function Preview(props: { formId: Number }) {
               />
             ) : (
               <select>
-                {form.fields[state].options.map((option: string) => (
-                  <option value={option}>{option}</option>
-                ))}
+                {form.fields[state].options.map(
+                  (option: { selected: string; value: string }) => (
+                    <option value={option.value}>{option.value}</option>
+                  )
+                )}
               </select>
             )}
           </div>

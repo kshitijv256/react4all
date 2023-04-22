@@ -5,14 +5,21 @@ import { useRoutes } from "raviger";
 import Preview from "../components/Preview";
 import About from "../components/About";
 import NotFound from "../components/404page";
+import { MyForm } from "../types/data";
 
 const routes = {
   "/": () => <Home />,
   "/about": () => <About />,
-  "/form/:id": ({ id }: { id: string }) => <Form id={Number(id)} />,
-  "/preview/:formId": ({ formId }: { formId: string }) => (
-    <Preview formId={Number(formId)} />
-  ),
+  "/form/:id": ({ id }: { id: string }) => {
+    const forms = JSON.parse(localStorage.getItem("forms") || "[]");
+    const isthere = forms.find((form: MyForm) => form.id === Number(id));
+    return isthere ? <Form id={Number(id)} /> : <NotFound />;
+  },
+  "/preview/:formId": ({ formId }: { formId: string }) => {
+    const forms = JSON.parse(localStorage.getItem("forms") || "[]");
+    const isthere = forms.find((form: MyForm) => form.id === Number(formId));
+    return isthere ? <Preview formId={Number(formId)} /> : <NotFound />;
+  },
   "*": () => <NotFound />,
 };
 
