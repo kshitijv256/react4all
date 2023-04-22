@@ -56,32 +56,42 @@ export default function Form(props: { id: number }) {
     };
   }, [formState]);
 
+  const getField = () => {
+    if (type === "dropdown") {
+      return {
+        kind: "dropdown",
+        id: Number(new Date()),
+        label: fieldValue,
+        value: "",
+        options: [],
+        placeholder: "",
+      } as FormItem;
+    }
+    if (type === "textarea") {
+      return {
+        kind: "textarea",
+        id: Number(new Date()),
+        label: fieldValue,
+        value: "",
+        placeholder: "",
+      } as FormItem;
+    }
+    return {
+      kind: "text",
+      id: Number(new Date()),
+      label: fieldValue,
+      type: type,
+      value: "",
+      placeholder: "",
+    } as FormItem;
+  };
   const addField = () => {
     setFormState(
       formState.map((item) => {
         if (item.id === props.id) {
           return {
             ...item,
-            fields: [
-              ...item.fields,
-              type !== "dropdown"
-                ? ({
-                    kind: "text",
-                    id: Number(new Date()),
-                    label: fieldValue,
-                    type: type,
-                    value: "",
-                    placeholder: "",
-                  } as FormItem)
-                : ({
-                    kind: "dropdown",
-                    id: Number(new Date()),
-                    label: fieldValue,
-                    value: "",
-                    options: [],
-                    placeholder: "",
-                  } as FormItem),
-            ],
+            fields: [...item.fields, getField()],
           };
         } else {
           return item;
@@ -180,7 +190,7 @@ export default function Form(props: { id: number }) {
           {formState
             .filter((item) => item.id === props.id)[0]
             .fields.map((item) =>
-              item.kind === "text" ? (
+              item.kind === "text" || item.kind === "textarea" ? (
                 <InputLabel
                   removeFieldCB={removeField}
                   changedCB={changedCB}

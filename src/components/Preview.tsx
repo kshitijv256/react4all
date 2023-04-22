@@ -47,6 +47,51 @@ export default function Preview(props: { formId: number }) {
     saveForm(newState);
   };
 
+  const renderField = (field: FormItem) => {
+    if (field.kind === "text") {
+      return (
+        <div>
+          <label className="text-sm font-semibold pt-2">
+            {form.fields[state].label}
+          </label>
+          <input
+            className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
+            type={form.fields[state].type}
+            value={formState[state].value}
+            onChange={(e) => {
+              const newState = [...formState];
+              newState[state].value = e.target.value;
+              setFormState(newState);
+            }}
+          />
+        </div>
+      );
+    }
+    if (field.kind === "textarea") {
+      return (
+        <div>
+          <label className="text-sm font-semibold pt-2">
+            {form.fields[state].label}
+          </label>
+          <textarea
+            className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
+            value={formState[state].value}
+            cols={30}
+            rows={5}
+            onChange={(e) => {
+              const newState = [...formState];
+              newState[state].value = e.target.value;
+              setFormState(newState);
+            }}
+          />
+        </div>
+      );
+    }
+    if (field.kind === "dropdown") {
+      return <DropDown field={form.fields[state]} selectCB={selectOption} />;
+    }
+  };
+
   return (
     <div className="p-4 flex flex-col">
       <div className="flex justify-between items-center">
@@ -57,25 +102,7 @@ export default function Preview(props: { formId: number }) {
           <div className="text-lg text-center p-4">That's it for now.</div>
         ) : (
           <div className="flex flex-col gap-2">
-            {form.fields[state].kind === "text" ? (
-              <div>
-                <label className="text-sm font-semibold pt-2">
-                  {form.fields[state].label}
-                </label>
-                <input
-                  className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
-                  type={form.fields[state].type}
-                  value={formState[state].value}
-                  onChange={(e) => {
-                    const newState = [...formState];
-                    newState[state].value = e.target.value;
-                    setFormState(newState);
-                  }}
-                />
-              </div>
-            ) : (
-              <DropDown field={form.fields[state]} selectCB={selectOption} />
-            )}
+            {renderField(form.fields[state])}
           </div>
         )}
       </div>

@@ -24,7 +24,15 @@ export type DropDownField = {
   placeholder: string;
 };
 
-export type FormItem = textField | DropDownField;
+export type TextAreaField = {
+  kind: "textarea";
+  id: number;
+  label: string;
+  value: string;
+  placeholder: string;
+};
+
+export type FormItem = textField | DropDownField | TextAreaField;
 
 export const formItems: FormItem[] = [
   {
@@ -87,5 +95,7 @@ export const inputOptions = [
   { value: "tel", label: "Phone" },
   { value: "date", label: "Date" },
   { value: "number", label: "Number" },
+  { value: "textarea", label: "Textarea" },
+  { value: "radio", label: "Radio" },
   { value: "dropdown", label: "Dropdown" },
 ];
