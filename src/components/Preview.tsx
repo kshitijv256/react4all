@@ -50,6 +50,21 @@ export default function Preview(props: { formId: number }) {
     saveForm(newState);
   };
 
+  const selectRadio = (id: number, value: string) => {
+    const newState = formState.map((field) => {
+      if (field.id === id && field.kind === "radio") {
+        return {
+          ...field,
+          value: field.options.find((option) => option === value) || "",
+        };
+      } else {
+        return field;
+      }
+    });
+    setFormState(newState);
+    saveForm(newState);
+  };
+
   const renderField = (field: FormItem) => {
     if (field.kind === "text") {
       return (
@@ -94,7 +109,7 @@ export default function Preview(props: { formId: number }) {
       return <DropDown field={form.fields[state]} selectCB={selectOption} />;
     }
     if (field.kind === "radio") {
-      return <RadioInput field={field} selectCB={(value) => {}} />;
+      return <RadioInput field={field} selectCB={selectRadio} />;
     }
   };
 

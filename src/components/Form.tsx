@@ -64,7 +64,7 @@ export default function Form(props: { id: number }) {
         id: Number(new Date()),
         label: fieldValue,
         value: "",
-        options: [],
+        options: [{ value: "sample", selected: false }],
         placeholder: "",
       } as FormItem;
     }
@@ -83,7 +83,7 @@ export default function Form(props: { id: number }) {
         id: Number(new Date()),
         label: fieldValue,
         value: "",
-        options: [],
+        options: ["sample"],
         placeholder: "",
       } as FormItem;
     }
@@ -98,6 +98,10 @@ export default function Form(props: { id: number }) {
   };
 
   const addField = () => {
+    if (fieldValue === "") {
+      console.log("Field value is empty");
+      return;
+    }
     setFormState(
       formState.map((item) => {
         if (item.id === props.id) {
