@@ -1,16 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { MyForm, FormItem } from "../types/data";
 import DropDown from "./DropDown";
 import { Link } from "raviger";
 import closeIcon from "../assets/close.svg";
 import RadioInput from "./RadioInput";
 
+// Actions
+type ChangeAction = {
+  type: "CHANGE";
+  data: string;
+  index: number;
+};
+
+type SelectOption = {
+  type: "SELECT_OPTION";
+  selected: boolean;
+  id: number;
+  value: string;
+};
+
+type SelectRadio = {
+  type: "SELECT_RADIO";
+  id: number;
+  value: string;
+};
+
+type Actions = ChangeAction | SelectOption | SelectRadio;
+
+const reducer = (state: FormItem[], action: Actions) => {
+  switch (action.type) {
+    case "CHANGE": {
+      const newState = [...state];
+      newState[action.index].value = action.data;
+      return newState;
+    }
+    case "SELECT_OPTION": {
+      const newState = [...state];
+      return newState.map((field) => {
+        if (field.id === action.id && field.kind === "dropdown") {
+          field.options.map((option) => {
+            if (option.value === action.value) {
+              option.selected = action.selected;
+            }
+            return option;
+          });
+        }
+        return field;
+      });
+    }
+    case "SELECT_RADIO": {
+      const newState = state.map((field) => {
+        if (field.id === action.id && field.kind === "radio") {
+          return {
+            ...field,
+            value:
+              field.options.find((option) => option === action.value) || "",
+          };
+        } else {
+          return field;
+        }
+      });
+      return newState;
+    }
+    default:
+      return state;
+  }
+};
+
 export default function Preview(props: { formId: number }) {
   const forms = localStorage.getItem("forms") || "[]";
   const form =
     forms && JSON.parse(forms).find((form: MyForm) => form.id === props.formId);
-  const [state, setState] = useState(0);
-  const [formState, setFormState] = useState<FormItem[]>(form.fields);
+  const [state, setState] = useState(0); // for indexing
+  const [formState, dispatch] = useReducer(reducer, null, () => form.fields);
 
   const saveForm = (newState: FormItem[]) => {
     const newForms = JSON.parse(forms).map((form: MyForm) => {
@@ -27,42 +89,51 @@ export default function Preview(props: { formId: number }) {
   };
 
   const selectOption = (selected: boolean, id: number, value: string) => {
-    const newState = formState.map((field) => {
-      if (field.id === id && field.kind === "dropdown") {
-        return {
-          ...field,
-          options: field.options.map((option) => {
-            if (option.value === value) {
-              return {
-                ...option,
-                selected,
-              };
-            } else {
-              return option;
-            }
-          }),
-        };
-      } else {
-        return field;
-      }
+    // const newState = formState.map((field) => {
+    //   if (field.id === id && field.kind === "dropdown") {
+    //     return {
+    //       ...field,
+    //       options: field.options.map((option) => {
+    //         if (option.value === value) {
+    //           return {
+    //             ...option,
+    //             selected,
+    //           };
+    //         } else {
+    //           return option;
+    //         }
+    //       }),
+    //     };
+    //   } else {
+    //     return field;
+    //   }
+    // });
+    dispatch({
+      type: "SELECT_OPTION",
+      selected,
+      id,
+      value,
     });
-    setFormState(newState);
-    saveForm(newState);
+    saveForm(formState);
   };
 
   const selectRadio = (id: number, value: string) => {
-    const newState = formState.map((field) => {
-      if (field.id === id && field.kind === "radio") {
-        return {
-          ...field,
-          value: field.options.find((option) => option === value) || "",
-        };
-      } else {
-        return field;
-      }
+    // const newState = formState.map((field) => {
+    //   if (field.id === id && field.kind === "radio") {
+    //     return {
+    //       ...field,
+    //       value: field.options.find((option) => option === value) || "",
+    //     };
+    //   } else {
+    //     return field;
+    //   }
+    // });
+    dispatch({
+      type: "SELECT_RADIO",
+      id,
+      value,
     });
-    setFormState(newState);
-    saveForm(newState);
+    saveForm(formState);
   };
 
   const renderField = (field: FormItem) => {
@@ -77,10 +148,12 @@ export default function Preview(props: { formId: number }) {
             type={form.fields[state].type}
             value={formState[state].value}
             onChange={(e) => {
-              const newState = [...formState];
-              newState[state].value = e.target.value;
-              setFormState(newState);
-              saveForm(newState);
+              dispatch({
+                type: "CHANGE",
+                data: e.target.value,
+                index: state,
+              });
+              saveForm(formState);
             }}
           />
         </div>
@@ -98,10 +171,12 @@ export default function Preview(props: { formId: number }) {
             cols={30}
             rows={5}
             onChange={(e) => {
-              const newState = [...formState];
-              newState[state].value = e.target.value;
-              setFormState(newState);
-              saveForm(newState);
+              dispatch({
+                type: "CHANGE",
+                data: e.target.value,
+                index: state,
+              });
+              saveForm(formState);
             }}
           />
         </div>
