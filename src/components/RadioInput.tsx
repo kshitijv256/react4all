@@ -11,12 +11,16 @@ export default function RadioInput(props: {
       <div className="flex flex-col gap-2">
         <form>
           {props.field.options.map((option) => (
-            <div className="flex items-center gap-2 ml-2">
+            <div className="flex items-center gap-2 ml-2" key={option}>
               <input
                 type="radio"
                 name={props.field.label}
                 value={option}
                 id={option}
+                checked={props.field.value === option}
+                onChange={(e) => {
+                  props.selectCB(props.field.id, option);
+                }}
               />
               <label htmlFor={option}>{option}</label>
             </div>

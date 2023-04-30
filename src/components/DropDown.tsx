@@ -29,6 +29,7 @@ export default function DropDown(props: {
           <div
             className="ml-4 gap-2 py-1"
             style={open ? { display: "flex" } : { display: "none" }}
+            key={option.value}
           >
             <input
               type="checkbox"

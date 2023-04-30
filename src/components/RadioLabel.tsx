@@ -66,7 +66,7 @@ export default function RadioLabel(props: {
         onClick={(_) => {
           const newForm = {
             ...props.item,
-            options: [...props.item.options, ""],
+            options: [...props.item.options, "New Option"],
           };
           props.changedCB(newForm, props.id);
         }}
