@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useReducer } from "react";
 import { FormItem, MyForm, formItems, inputOptions } from "../types/data";
 import resetIcon from "../assets/reset.svg";
 import closeIcon from "../assets/logout.svg";
@@ -33,8 +33,116 @@ const getFormData: () => MyForm[] = () => {
   ];
 };
 
+// actions
+type AddAction = {
+  type: "ADD_FIELD";
+  data: FormItem;
+  id: number;
+};
+type RemoveAction = {
+  type: "REMOVE_FIELD";
+  id: number;
+  formId: number;
+};
+
+type UpdateAction = {
+  type: "UPDATE_FIELD";
+  data: FormItem;
+  id: number;
+  formId: number;
+};
+type ClearAction = {
+  type: "CLEAR_FORM";
+  id: number;
+};
+type UpdateTitleAction = {
+  type: "UPDATE_TITLE";
+  data: string;
+  formId: number;
+};
+
+type FormAction =
+  | AddAction
+  | RemoveAction
+  | UpdateAction
+  | ClearAction
+  | UpdateTitleAction;
+
+const reducer = (state: MyForm[], action: FormAction) => {
+  switch (action.type) {
+    case "ADD_FIELD":
+      return state.map((item) => {
+        if (item.id === action.id) {
+          return {
+            ...item,
+            fields: [...item.fields, action.data],
+          };
+        }
+        return item;
+      });
+    case "REMOVE_FIELD":
+      return state.map((item) => {
+        if (item.id === action.formId) {
+          return {
+            ...item,
+            fields: item.fields.filter((field) => field.id !== action.id),
+          };
+        }
+        return item;
+      });
+    case "UPDATE_FIELD":
+      return state.map((item) => {
+        if (item.id === action.formId) {
+          return {
+            ...item,
+            fields: item.fields.map((field) => {
+              if (field.id === action.id) {
+                return action.data;
+              }
+              return field;
+            }),
+          };
+        }
+        return item;
+      });
+    case "CLEAR_FORM": {
+      return state.map((form) => {
+        if (form.id === action.id) {
+          return {
+            ...form,
+            fields: state
+              .filter((item) => item.id === action.id)[0]
+              .fields.map((item) => {
+                return {
+                  ...item,
+                  value: "",
+                };
+              }),
+          };
+        } else {
+          return form;
+        }
+      });
+    }
+    case "UPDATE_TITLE": {
+      return state.map((form) => {
+        if (form.id === action.formId) {
+          return {
+            ...form,
+            title: action.data,
+          };
+        } else {
+          return form;
+        }
+      });
+    }
+    default:
+      return state;
+  }
+};
+
 export default function Form(props: { id: number }) {
-  const [formState, setFormState] = useState(() => getFormData());
+  const [formState, dispatch] = useReducer(reducer, null, () => getFormData());
   const [fieldValue, setFieldValue] = useState("");
   const [type, setType] = useState("text");
   const titleRef = useRef<HTMLInputElement>(null);
@@ -97,84 +205,20 @@ export default function Form(props: { id: number }) {
     } as FormItem;
   };
 
-  const addField = () => {
-    if (fieldValue === "") {
-      console.log("Field value is empty");
-      return;
-    }
-    setFormState(
-      formState.map((item) => {
-        if (item.id === props.id) {
-          return {
-            ...item,
-            fields: [...item.fields, getField()],
-          };
-        } else {
-          return item;
-        }
-      })
-    );
-    setFieldValue("");
-  };
   const removeField = (id: number) => {
-    setFormState(
-      formState.map((form) => {
-        if (form.id === props.id) {
-          return {
-            ...form,
-            fields: formState
-              .filter((item) => item.id === props.id)[0]
-              .fields.filter((item) => item.id !== id),
-          };
-        } else {
-          return form;
-        }
-      })
-    );
+    dispatch({
+      type: "REMOVE_FIELD",
+      id: id,
+      formId: props.id,
+    });
   };
   const changedCB = (newForm: FormItem, id: number) => {
-    setFormState(
-      formState.map((form) => {
-        if (form.id === props.id) {
-          return {
-            ...form,
-            fields: formState
-              .filter((item1) => item1.id === props.id)[0]
-              .fields.map((item) => {
-                if (item.id === id) {
-                  return newForm;
-                } else {
-                  return item;
-                }
-              }),
-          };
-        } else {
-          return form;
-        }
-      })
-    );
-  };
-
-  const resetForm = () => {
-    setFormState(
-      formState.map((form) => {
-        if (form.id === props.id) {
-          return {
-            ...form,
-            fields: formState
-              .filter((item) => item.id === props.id)[0]
-              .fields.map((item) => {
-                return {
-                  ...item,
-                  value: "",
-                };
-              }),
-          };
-        } else {
-          return form;
-        }
-      })
-    );
+    dispatch({
+      type: "UPDATE_FIELD",
+      data: newForm,
+      id: id,
+      formId: props.id,
+    });
   };
 
   const getLabel = (item: FormItem) => {
@@ -219,18 +263,11 @@ export default function Form(props: { id: number }) {
           type="text"
           value={formState.find((item) => item.id === props.id)?.title}
           onChange={(e) => {
-            setFormState(
-              formState.map((item) => {
-                if (item.id === props.id) {
-                  return {
-                    ...item,
-                    title: e.target.value,
-                  };
-                } else {
-                  return item;
-                }
-              })
-            );
+            dispatch({
+              type: "UPDATE_TITLE",
+              formId: props.id,
+              data: e.target.value,
+            });
           }}
           ref={titleRef}
           className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full mt-2"
@@ -268,7 +305,18 @@ export default function Form(props: { id: number }) {
         </div>
         <button
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
-          onClick={addField}
+          onClick={(_) => {
+            if (fieldValue === "") {
+              console.log("Field value is empty");
+              return;
+            }
+            dispatch({
+              type: "ADD_FIELD",
+              data: getField(),
+              id: props.id,
+            });
+            setFieldValue("");
+          }}
         >
           Add Field
         </button>
@@ -286,7 +334,12 @@ export default function Form(props: { id: number }) {
           <img src={closeIcon} alt="delete" className="w-8" />
         </Link>
         <button
-          onClick={resetForm}
+          onClick={(_) =>
+            dispatch({
+              type: "CLEAR_FORM",
+              id: props.id,
+            })
+          }
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
         >
           <img src={resetIcon} alt="delete" className="w-8" />

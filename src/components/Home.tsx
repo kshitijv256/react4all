@@ -76,19 +76,19 @@ export default function Home() {
               className="py-3 flex items-center justify-between"
               key={form.id}
             >
-              <h1 className="text-xl font-semibold">{form.title}</h1>
+              <h1 className="text-xl text-gray-800">{form.title}</h1>
               <div className="flex gap-2">
-                <Link
-                  href={`/preview/${form.id}`}
-                  className="p-2 bg-cyan-500 rounded-lg text-white"
-                >
-                  <img src={previewIcon} alt="open preview" className="w-6" />
-                </Link>
                 <Link
                   href={`/form/${form.id}`}
                   className="p-2 bg-cyan-500 rounded-lg text-white"
                 >
                   <img src={editIcon} alt="open" className="w-6" />
+                </Link>
+                <Link
+                  href={`/preview/${form.id}`}
+                  className="p-2 bg-cyan-500 rounded-lg text-white"
+                >
+                  <img src={previewIcon} alt="open preview" className="w-6" />
                 </Link>
                 <button
                   onClick={() => deleteForm(form.id)}
