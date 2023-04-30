@@ -80,6 +80,7 @@ export default function Preview(props: { formId: number }) {
               const newState = [...formState];
               newState[state].value = e.target.value;
               setFormState(newState);
+              saveForm(newState);
             }}
           />
         </div>
@@ -100,6 +101,7 @@ export default function Preview(props: { formId: number }) {
               const newState = [...formState];
               newState[state].value = e.target.value;
               setFormState(newState);
+              saveForm(newState);
             }}
           />
         </div>
