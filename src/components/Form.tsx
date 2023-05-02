@@ -64,7 +64,7 @@ export default function Form(props: { id: number }) {
         id: Number(new Date()),
         label: fieldValue,
         value: "",
-        options: [{ value: "sample", selected: false }],
+        options: [],
         placeholder: "",
       } as FormItem;
     }
