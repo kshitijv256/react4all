@@ -34,7 +34,7 @@ const getFormData: () => MyForm[] = () => {
 };
 
 export default function Form(props: { id: number }) {
-  const [formState, setFormState] = useState(() => getFormData());
+  const [formState, setFormState] = useState<MyForm[]>(() => getFormData());
   const [fieldValue, setFieldValue] = useState("");
   const [type, setType] = useState("text");
   const titleRef = useRef<HTMLInputElement>(null);
@@ -85,6 +85,17 @@ export default function Form(props: { id: number }) {
         value: "",
         options: [],
         placeholder: "",
+      } as FormItem;
+    }
+    if (type === "range") {
+      return {
+        kind: "slider",
+        id: Number(new Date()),
+        label: fieldValue,
+        value: 0,
+        min: 0,
+        max: 100,
+        step: 1,
       } as FormItem;
     }
     return {
@@ -164,6 +175,12 @@ export default function Form(props: { id: number }) {
             fields: formState
               .filter((item) => item.id === props.id)[0]
               .fields.map((item) => {
+                if (item.kind === "slider") {
+                  return {
+                    ...item,
+                    value: 0,
+                  };
+                }
                 return {
                   ...item,
                   value: "",

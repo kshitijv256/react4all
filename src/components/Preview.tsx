@@ -117,6 +117,28 @@ export default function Preview(props: { formId: number }) {
       }
       return <RadioInput field={field} selectCB={selectRadio} />;
     }
+    if (field.kind === "slider") {
+      return (
+        <div>
+          <label className="text-sm font-semibold pt-2">
+            {form.fields[state].label}
+          </label>
+          <input
+            className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
+            type="range"
+            min={form.fields[state].min}
+            max={form.fields[state].max}
+            value={formState[state].value}
+            onChange={(e) => {
+              const newState = [...formState];
+              newState[state].value = e.target.value;
+              setFormState(newState);
+            }}
+          />
+          <p>Value: {formState[state].value}</p>
+        </div>
+      );
+    }
   };
 
   return (
