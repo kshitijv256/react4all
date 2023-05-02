@@ -106,9 +106,15 @@ export default function Preview(props: { formId: number }) {
       );
     }
     if (field.kind === "dropdown") {
+      if (form.fields[state].options.length === 0) {
+        return <p className="text-red-600">!! No options added in dropdown</p>;
+      }
       return <DropDown field={form.fields[state]} selectCB={selectOption} />;
     }
     if (field.kind === "radio") {
+      if (form.fields[state].options.length === 0) {
+        return <p className="text-red-600">!! No options added in radio</p>;
+      }
       return <RadioInput field={field} selectCB={selectRadio} />;
     }
   };
