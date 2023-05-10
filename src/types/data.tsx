@@ -41,6 +41,16 @@ export type TextAreaField = {
   placeholder: string;
 };
 
+export type SliderField = {
+  kind: "slider";
+  id: number;
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+};
+
 export type FormItem = textField | DropDownField | TextAreaField | RadioField;
 
 export const formItems: FormItem[] = [

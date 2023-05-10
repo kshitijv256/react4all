@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useReducer } from "react";
 import { MyForm, FormItem } from "../types/data";
 import DropDown from "./DropDown";
 import { Link } from "raviger";
@@ -44,6 +44,27 @@ type SelectRadio = {
 };
 
 type Actions = ChangeAction | SelectOption | SelectRadio;
+
+type IncreaseIndex = {
+  type: "INCREASE_INDEX";
+};
+
+type DecreaseIndex = {
+  type: "DECREASE_INDEX";
+};
+
+type IndexActions = IncreaseIndex | DecreaseIndex;
+
+const indexReducer = (state: number, action: IndexActions) => {
+  switch (action.type) {
+    case "INCREASE_INDEX":
+      return state + 1;
+    case "DECREASE_INDEX":
+      return state - 1;
+    default:
+      return state;
+  }
+};
 
 const reducer = (state: FormItem[], action: Actions) => {
   switch (action.type) {
@@ -100,7 +121,7 @@ export default function Preview(props: { formId: number }) {
   const forms = localStorage.getItem("forms") || "[]";
   const form =
     forms && JSON.parse(forms).find((form: MyForm) => form.id === props.formId);
-  const [state, setState] = useState(0); // for indexing
+  const [state, dispatchIndex] = useReducer(indexReducer, 0);
   const [formState, dispatch] = useReducer(reducer, null, () => form.fields);
 
   const selectOption = (selected: boolean, id: number, value: string) => {
@@ -197,7 +218,7 @@ export default function Preview(props: { formId: number }) {
           }  text-white p-2 rounded-md w-full`}
           onClick={(_) => {
             if (state > 0) {
-              setState(state - 1);
+              dispatchIndex({ type: "DECREASE_INDEX" });
             }
           }}
         >
@@ -211,7 +232,7 @@ export default function Preview(props: { formId: number }) {
           }  text-white p-2 rounded-md w-full`}
           onClick={(_) => {
             if (state < form.fields.length) {
-              setState(state + 1);
+              dispatchIndex({ type: "INCREASE_INDEX" });
             }
           }}
         >
