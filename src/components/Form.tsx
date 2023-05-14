@@ -172,7 +172,7 @@ export default function Form(props: { id: number }) {
         id: Number(new Date()),
         label: fieldValue,
         value: "",
-        options: [{ value: "sample", selected: false }],
+        options: [],
         placeholder: "",
       } as FormItem;
     }
@@ -191,7 +191,7 @@ export default function Form(props: { id: number }) {
         id: Number(new Date()),
         label: fieldValue,
         value: "",
-        options: ["sample"],
+        options: [],
         placeholder: "",
       } as FormItem;
     }
@@ -275,7 +275,7 @@ export default function Form(props: { id: number }) {
         <div className="flex flex-col gap-4 mt-4">
           <h2 className="font-semibold">Questions</h2>
           {formState
-            .filter((item) => item.id === props.id)[0]
+            .filter((item: MyForm) => item.id === props.id)[0]
             .fields.map((item) => getLabel(item))}
         </div>
       </div>
