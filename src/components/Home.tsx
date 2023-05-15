@@ -5,6 +5,8 @@ import editIcon from "../assets/login.svg";
 import previewIcon from "../assets/preview.svg";
 import searchIcon from "../assets/search.svg";
 import { Link, useQueryParams } from "raviger";
+import Modal from "./common/Modal";
+import CreateForm from "./CreateForm";
 
 const getForms = () => {
   const forms = localStorage.getItem("forms");
@@ -17,17 +19,17 @@ const saveFormData = (data: MyForm[]) => {
   localStorage.setItem("forms", JSON.stringify(data));
 };
 
-const fetchForms = (setformsCB: (value: FormItem[]) => void) => {
+const fetchForms = (setformsCB: (value: MyForm[]) => void) => {
   fetch("https://tsapi.coronasafe.live/api/mock_test/").then((res) => {
     res.json().then((data) => setformsCB(data));
-  }
-  );
+  });
 };
 
 export default function Home() {
-  const [forms, setForms] = useState(() => getForms());
+  const [forms, setForms] = useState<MyForm[]>(getForms());
   const [{ search }, setQuery] = useQueryParams();
   const [searchText, setSearchText] = useState(search || "");
+  const [newForm, setNewForm] = useState(false);
 
   const searchRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -112,11 +114,19 @@ export default function Home() {
           );
         })}
       <button
-        onClick={() => addForm()}
+        onClick={(_) => setNewForm(true)}
         className="p-2 mt-4 bg-cyan-500 rounded-lg text-white text-lg font-semibold"
       >
         + Add Form
       </button>
+      <Modal
+        open={newForm}
+        closeCB={() => {
+          setNewForm(false);
+        }}
+      >
+        <CreateForm />
+      </Modal>
     </div>
   );
 }
