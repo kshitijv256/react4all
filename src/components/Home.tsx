@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MyForm, formItems } from "../types/data";
+import { FormItem, MyForm, formItems } from "../types/data";
 import deleteIcon from "../assets/delete.svg";
 import editIcon from "../assets/login.svg";
 import previewIcon from "../assets/preview.svg";
@@ -17,6 +17,13 @@ const saveFormData = (data: MyForm[]) => {
   localStorage.setItem("forms", JSON.stringify(data));
 };
 
+const fetchForms = (setformsCB: (value: FormItem[]) => void) => {
+  fetch("https://tsapi.coronasafe.live/api/mock_test/").then((res) => {
+    res.json().then((data) => setformsCB(data));
+  }
+  );
+};
+
 export default function Home() {
   const [forms, setForms] = useState(() => getForms());
   const [{ search }, setQuery] = useQueryParams();
@@ -25,6 +32,10 @@ export default function Home() {
   const searchRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     searchRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    fetchForms(setForms);
   }, []);
 
   // TODO: Add new route for new form
