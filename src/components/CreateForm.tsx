@@ -78,7 +78,7 @@ export default function CreateForm() {
             <p className="text-red-500 text-xs italic">{errors.description}</p>
           )}
         </div>
-        <div className="mb-4">
+        <div className="flex items-center mb-4">
           <input
             type="checkbox"
             name="is_public"
@@ -89,9 +89,9 @@ export default function CreateForm() {
           />
           <label
             htmlFor="is_public"
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700 text-sm font-bold"
           >
-            Public
+            &nbsp;&nbsp;Is Public ?
           </label>
           {errors.is_public && (
             <p className="text-red-500 text-xs italic">{errors.is_public}</p>
