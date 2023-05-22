@@ -1,16 +1,24 @@
 import { navigate } from "raviger";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { login } from "../utils/apiUtils";
 
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            navigate("/");
+        }
+    }, []);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try{
             const data = await login(username, password);
             localStorage.setItem("token", data.token);
+            window.location.reload();
             navigate("/");
         } catch (error) {
             console.log(error);

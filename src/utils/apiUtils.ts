@@ -26,14 +26,20 @@ export const request = async (
         url = `${API_BASE_URL}${endpoint}`;
         payload = data ? JSON.stringify(data) : "";
     }
-    const auth = "Basic " + window.btoa("kshitij:7beva5FyGaUwyQh");
+
+    // basic auth
+    // const auth = "Basic " + window.btoa("kshitij:7beva5FyGaUwyQh");
+
+    // Token auth
+    const token = localStorage.getItem("token");
+    const auth = token ?  "Token " + token : "";
     const response = await fetch(API_BASE_URL + endpoint, {
         method,
         headers: {
             "Content-Type": "application/json",
             Authorization: auth,
         },
-        body: payload,
+        body: method !== "GET" ? payload : undefined,
     });
     if (response.ok) {
         return await response.json();

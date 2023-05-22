@@ -19,23 +19,38 @@ export default function Header(props: { currentUser: User }) {
   return (
     <div className="flex gap-2 items-center">
       <Logo animation="spin infinite 5s linear reverse" />
-      <ActiveLink href="/"></ActiveLink>
-
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-5 items-center">
         {[
           { name: "Home", href: "/" },
           { name: "About", href: "/about" },
-          ...(props.currentUser ? [{ name: "Logout", href: "/logout"}] : [{ name: "Login", href: "/login" }])
-        ].map((item) => (
-          <ActiveLink
-            key={item.name}
-            href={item.href}
-            className="text-xl"
-            exactActiveClass="text-blue-600"
-          >
-            {item.name}
-          </ActiveLink>
-        ))}
+          ...(props.currentUser && props.currentUser?.username?.length > 0
+            ? [
+                {
+                  name: "Logout",
+                  onClick: () => {
+                    localStorage.removeItem("token");
+                    navigate("/login");
+                    window.location.reload();
+                  },
+                },
+              ]
+            : [{ name: "Login", href: "/login" }]),
+        ].map((item) =>
+          item.href ? (
+            <ActiveLink
+              key={item.name}
+              href={item.href}
+              className="text-xl"
+              exactActiveClass="text-blue-600"
+            >
+              {item.name}
+            </ActiveLink>
+          ) : (
+            <button key={item.name} onClick={item.onClick} className="text-xl">
+              {item.name}
+            </button>
+          )
+        )}
         {/* {props.currentUser?.username?.length > 0 ? (
           <button
             className="text-xl"
