@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FormItem, MyForm, formItems } from "../types/data";
+import { Form, FormItem, MyForm, formItems } from "../types/data";
 import deleteIcon from "../assets/delete.svg";
 import editIcon from "../assets/login.svg";
 import previewIcon from "../assets/preview.svg";
@@ -9,24 +9,24 @@ import Modal from "./common/Modal";
 import CreateForm from "./CreateForm";
 import { listForms } from "../utils/apiUtils";
 
-const getForms = () => {
-  const forms = localStorage.getItem("forms");
-  if (forms) {
-    return JSON.parse(forms);
-  }
-  return [];
-};
-const saveFormData = (data: MyForm[]) => {
-  localStorage.setItem("forms", JSON.stringify(data));
-};
+// const getForms = () => {
+//   const forms = localStorage.getItem("forms");
+//   if (forms) {
+//     return JSON.parse(forms);
+//   }
+//   return [];
+// };
+// const saveFormData = (data: MyForm[]) => {
+//   localStorage.setItem("forms", JSON.stringify(data));
+// };
 
-const fetchForms = async (setformsCB: (value: MyForm[]) => void) => {
-  const forms = await listForms({limit: 3, offset: 0});
-  setformsCB(forms.results);
-};
+// const fetchForms = async (setformsCB: (value: MyForm[]) => void) => {
+//   const forms = await listForms({ limit: 3, offset: 0 });
+//   setformsCB(forms.results);
+//   return forms;
+// };
 
-export default function Home() {
-  const [forms, setForms] = useState<MyForm[]>(getForms());
+export default function Home(props: { forms: Form[] }) {
   const [{ search }, setQuery] = useQueryParams();
   const [searchText, setSearchText] = useState(search || "");
   const [newForm, setNewForm] = useState(false);
@@ -36,26 +36,23 @@ export default function Home() {
     searchRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    fetchForms(setForms);
-  }, []);
-
   // TODO: Add new route for new form
-  const addForm = () => {
-    const newForms = [
-      ...forms,
-      { id: Number(new Date()), title: "Untitled Form", fields: formItems },
-    ];
-    setForms(newForms);
-    saveFormData(newForms);
-  };
-  const deleteForm = (id: number) => {
-    const newForms = forms.filter((form: MyForm) => form.id !== id);
-    setForms(newForms);
-    saveFormData(newForms);
+  // const addForm = () => {
+  //   const newForms = [
+  //     ...forms,
+  //     { id: Number(new Date()), title: "Untitled Form", fields: formItems },
+  //   ];
+  //   setForms(newForms);
+  //   saveFormData(newForms);
+  // };
+  const deleteForm = (id?: number) => {
+    console.log("Not implemened yet");
+    // const newForms = forms.filter((form: MyForm) => form.id !== id);
+    // setForms(newForms);
+    // saveFormData(newForms);
   };
   return (
-    <div className="p-4 flex flex-col">
+    <div className="py-2 w-full flex flex-col">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -79,11 +76,11 @@ export default function Home() {
           </button>
         </div>
       </form>
-      {forms
-        .filter((form: MyForm) =>
+      {props.forms
+        .filter((form: Form) =>
           form.title.toLowerCase().includes(searchText.toLowerCase())
         )
-        .map((form: MyForm) => {
+        .map((form: Form) => {
           return (
             <div
               className="py-3 flex items-center justify-between"

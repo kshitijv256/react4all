@@ -1,9 +1,7 @@
-import { off } from "process";
-
 export type Pagination<T> = {
     count: number;
-    next: string;
-    previous: string;
+    next: string| null;
+    previous: string| null;
     results: T[];
 };
 

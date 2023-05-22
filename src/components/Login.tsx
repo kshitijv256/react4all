@@ -26,7 +26,7 @@ export default function Login() {
     };
     return (
         <div>
-            <h1>Login</h1>
+            <h1 className="my-4 text-2xl font-bold text-green-400">Login</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label
@@ -56,7 +56,7 @@ export default function Login() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <button type="submit">
+                    <button type="submit" className="px-2 py-1.5 mt-2 rounded bg-cyan-500 text-white hover:bg-cyan-600">
                         Login
                     </button>
                 </div>

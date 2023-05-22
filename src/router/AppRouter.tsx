@@ -1,5 +1,4 @@
 import React from "react";
-import Home from "../components/Home";
 import Form from "../components/Form";
 import { useRoutes } from "raviger";
 import Preview from "../components/Preview";
@@ -8,9 +7,10 @@ import NotFound from "../components/404page";
 import { MyForm } from "../types/data";
 import Login from "../components/Login";
 import { User } from "../types/User";
+import { PaginationUI } from "../components/common/PaginationUI";
 
 const routes = {
-  "/": () => <Home />,
+  "/": () => <PaginationUI />,
   "/login": () => <Login />,
   "/about": () => <About />,
   "/form/:id": ({ id }: { id: string }) => {
