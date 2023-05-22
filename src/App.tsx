@@ -6,16 +6,8 @@ import { Link } from "raviger";
 function App() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-200 items-center">
-      <div className="flex fixed  text-xl bg-transparent w-full px-2 justify-end">
-        <Link href="/">
-          <div className="p-2 hover:bg-cyan-300">Home</div>
-        </Link>
-        <Link href="/about">
-          <div className="p-2 hover:bg-cyan-300">About</div>
-        </Link>
-      </div>
       <div className="w-3/5 lg:w-2/5 p-4 my-10 mx-auto bg-white shadow-lg rounded-xl flex flex-col">
-        <Header title="Level 6 Submission" />
+        <Header currentUser={""}/>
         <AppRouter />
       </div>
     </div>

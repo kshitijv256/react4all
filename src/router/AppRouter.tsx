@@ -6,9 +6,11 @@ import Preview from "../components/Preview";
 import About from "../components/About";
 import NotFound from "../components/404page";
 import { MyForm } from "../types/data";
+import Login from "../components/Login";
 
 const routes = {
   "/": () => <Home />,
+  "/login": () => <Login />,
   "/about": () => <About />,
   "/form/:id": ({ id }: { id: string }) => {
     const forms = JSON.parse(localStorage.getItem("forms") || "[]");
