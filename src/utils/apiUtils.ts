@@ -1,5 +1,6 @@
 // Desc: API Utils for making API calls
 
+import { PaginationParams } from "../types/common";
 import { Form } from "../types/data";
 
 const API_BASE_URL = "https://tsapi.coronasafe.live/api/";
@@ -33,7 +34,7 @@ export const request = async (
     // Token auth
     const token = localStorage.getItem("token");
     const auth = token ?  "Token " + token : "";
-    const response = await fetch(API_BASE_URL + endpoint, {
+    const response = await fetch(url, {
         method,
         headers: {
             "Content-Type": "application/json",
@@ -59,4 +60,8 @@ export const login = (username: string, password: string) => {
 
 export const me = () => {
     return request("users/me/", "GET");
+}
+
+export const listForms = async (params: PaginationParams) => {
+    return await request("forms/", "GET", params);
 }

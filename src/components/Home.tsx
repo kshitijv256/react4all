@@ -7,6 +7,7 @@ import searchIcon from "../assets/search.svg";
 import { Link, useQueryParams } from "raviger";
 import Modal from "./common/Modal";
 import CreateForm from "./CreateForm";
+import { listForms } from "../utils/apiUtils";
 
 const getForms = () => {
   const forms = localStorage.getItem("forms");
@@ -19,10 +20,9 @@ const saveFormData = (data: MyForm[]) => {
   localStorage.setItem("forms", JSON.stringify(data));
 };
 
-const fetchForms = (setformsCB: (value: MyForm[]) => void) => {
-  fetch("https://tsapi.coronasafe.live/api/mock_test/").then((res) => {
-    res.json().then((data) => setformsCB(data));
-  });
+const fetchForms = async (setformsCB: (value: MyForm[]) => void) => {
+  const forms = await listForms({limit: 3, offset: 0});
+  setformsCB(forms.results);
 };
 
 export default function Home() {
