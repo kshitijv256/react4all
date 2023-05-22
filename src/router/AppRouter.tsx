@@ -7,6 +7,7 @@ import About from "../components/About";
 import NotFound from "../components/404page";
 import { MyForm } from "../types/data";
 import Login from "../components/Login";
+import { User } from "../types/User";
 
 const routes = {
   "/": () => <Home />,
@@ -25,7 +26,7 @@ const routes = {
   "*": () => <NotFound />,
 };
 
-export default function AppRouter() {
+export default function AppRouter(currentuser: User) {
   const routeResult = useRoutes(routes);
   return routeResult || <div className="h-screen flex items-center"> </div>;
 }

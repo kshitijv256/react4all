@@ -15,19 +15,18 @@ import { User } from "../types/User";
 //   );
 // }
 
-const menuItems = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-];
-
 export default function Header(props: { currentUser: User }) {
   return (
     <div className="flex gap-2 items-center">
       <Logo animation="spin infinite 5s linear reverse" />
       <ActiveLink href="/"></ActiveLink>
 
-      <div className="flex gap-5 items-center">
-        {menuItems.map((item) => (
+      <div className="flex gap-2 items-center">
+        {[
+          { name: "Home", href: "/" },
+          { name: "About", href: "/about" },
+          ...(props.currentUser ? [{ name: "Logout", href: "/logout"}] : [{ name: "Login", href: "/login" }])
+        ].map((item) => (
           <ActiveLink
             key={item.name}
             href={item.href}
@@ -37,7 +36,7 @@ export default function Header(props: { currentUser: User }) {
             {item.name}
           </ActiveLink>
         ))}
-        {props.currentUser?.username?.length > 0 ? (
+        {/* {props.currentUser?.username?.length > 0 ? (
           <button
             className="text-xl"
             onClick={() => {
@@ -56,7 +55,8 @@ export default function Header(props: { currentUser: User }) {
           >
             Login
           </ActiveLink>
-        )}
+        )
+        } */}
       </div>
       {/* <Logo animation='spin infinite 5s linear' /> */}
     </div>
