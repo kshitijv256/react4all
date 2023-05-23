@@ -14,6 +14,9 @@ export default function InputLabel(props: {
     const newForm = { ...props.item, label: label };
     props.changedCB(newForm, props.id);
   };
+  const deleteField = () => {
+    props.removeFieldCB(props.id);
+  };
   return (
     <div className="flex flex-col gap-2">
       <div className="flex w-full gap-2">
@@ -33,7 +36,7 @@ export default function InputLabel(props: {
         </button>
         <button
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
-          onClick={(_) => props.removeFieldCB(props.id)}
+          onClick={() => props.removeFieldCB(props.id)}
         >
           {<img src={deleteIcon} alt="delete" className="w-8" />}
         </button>

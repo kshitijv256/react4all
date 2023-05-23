@@ -3,7 +3,7 @@ import { Link } from "raviger";
 import resetIcon from "../assets/reset.svg";
 import closeIcon from "../assets/logout.svg"
 import { FormItem, MyForm, inputOptions } from "../types/data";
-import { createFormFields, getForm, getFormFields, updateFormFields } from "../utils/apiUtils";
+import { createFormFields, deleteFormFields, getForm, getFormFields, updateFormFields } from "../utils/apiUtils";
 import DropdownLabel from "./DropdownLabel";
 import RadioLabel from "./RadioLabel";
 import InputLabel from "./InputLabel";
@@ -30,6 +30,12 @@ const updateField = async (form_pk: number, field: FormItem, id: number, setFiel
   getFields(form_pk, setFieldsCB);
 }
 
+const deleteField = async (form_pk: number, id: number, setFieldsCB: (value: FormItem[]) => void) => {
+  await deleteFormFields(form_pk, id).then(() => {
+  getFields(form_pk, setFieldsCB);
+  });
+}
+
 export default function FormUI(props: { id: number }) {
   const [title, setTitle] = useState("");
   const [fieldValue, setFieldValue] = useState("");
@@ -39,7 +45,9 @@ export default function FormUI(props: { id: number }) {
   useEffect(() => {
     getFields(props.id, setFields);
     getTitle(props.id, setTitle);
-  }, [props.id]);
+  }, []);
+
+  
 
   const titleRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -93,8 +101,7 @@ export default function FormUI(props: { id: number }) {
   };
 
   const removeField = (id: number) => {
-    const newFields = fields.filter((item) => item.id !== id);
-    setFields(newFields);
+    deleteField(props.id, id, setFields);
   };
   const changedCB = (newForm: FormItem, id: number) => {
     updateField(props.id, newForm, id, setFields);

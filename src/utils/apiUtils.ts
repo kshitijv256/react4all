@@ -44,7 +44,13 @@ export const request = async (
         body: method !== "GET" ? payload : undefined,
     });
     if (response.ok) {
-        return await response.json();
+        try{
+            const data = await response.json();
+            return data;
+        }
+        catch(err){
+            return {};
+        }
     } else {
         const errorMessage = await response.text();
         throw new Error(errorMessage);
@@ -81,4 +87,8 @@ export const createFormFields = async (form_pk: number, fields: FormItem) => {
 
 export const updateFormFields = async (form_pk: number, fields: FormItem, id: number) => {
     return await request(`forms/${form_pk}/fields/${id}/`, "PATCH", fields);
+}
+
+export const deleteFormFields = async (form_pk: number, id: number) => {
+    return await request(`forms/${form_pk}/fields/${id}/`, "DELETE");
 }
