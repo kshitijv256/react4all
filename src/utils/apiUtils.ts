@@ -1,5 +1,6 @@
 // Desc: API Utils for making API calls
 
+import { get } from "http";
 import { PaginationParams } from "../types/common";
 import { Form } from "../types/data";
 
@@ -64,4 +65,12 @@ export const me = () => {
 
 export const listForms = async (params: PaginationParams) => {
     return await request("forms/", "GET", params);
+}
+
+export const getForm = async (id: number) => {
+    return await request(`forms/${id}/`, "GET");
+}
+
+export const getFormFields = async (form_pk: number) => {
+    return await request(`forms/${form_pk}/fields/`, "GET");
 }
