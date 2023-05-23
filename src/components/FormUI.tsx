@@ -192,7 +192,7 @@ export default function FormUI(props: { id: number }) {
         </button>
       </div>
       <div className="flex flex-row gap-2 pt-2">
-        <button
+        {/* <button
           onClick={() => {
             // saveFormData(formState);
             console.log("Saving form not implemented");
@@ -200,7 +200,7 @@ export default function FormUI(props: { id: number }) {
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
         >
           Save Form
-        </button>
+        </button> */}
         <Link href="/" className="bg-cyan-500 text-white p-2 rounded-md w-fit">
           <img src={closeIcon} alt="delete" className="w-8" />
         </Link>
