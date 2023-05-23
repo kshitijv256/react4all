@@ -81,6 +81,10 @@ export const updateForm = async (form: Form, id: number) => {
     return await request(`forms/${id}/`, "PUT", form);
 }
 
+export const deleteForm = async (id: number) => {
+    return await request(`forms/${id}/`, "DELETE");
+}
+
 export const getFormFields = async (form_pk: number) => {
     return await request(`forms/${form_pk}/fields/`, "GET");
 }

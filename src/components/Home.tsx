@@ -7,7 +7,7 @@ import searchIcon from "../assets/search.svg";
 import { Link, useQueryParams } from "raviger";
 import Modal from "./common/Modal";
 import CreateForm from "./CreateForm";
-import { listForms } from "../utils/apiUtils";
+import { deleteForm, listForms } from "../utils/apiUtils";
 
 // const getForms = () => {
 //   const forms = localStorage.getItem("forms");
@@ -26,7 +26,16 @@ import { listForms } from "../utils/apiUtils";
 //   return forms;
 // };
 
-export default function Home(props: { forms: Form[] }) {
+const removeFormAS = async (id: number, updateCB: () => void) => {
+  try {
+    await deleteForm(id);
+    updateCB();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export default function Home(props: { forms: Form[], updateFormsCB: () => void }) {
   const [{ search }, setQuery] = useQueryParams();
   const [searchText, setSearchText] = useState(search || "");
   const [newForm, setNewForm] = useState(false);
@@ -35,6 +44,10 @@ export default function Home(props: { forms: Form[] }) {
   useEffect(() => {
     searchRef.current?.focus();
   }, []);
+
+  const removeForm = (id: number) => {
+    removeFormAS(id, props.updateFormsCB);
+  };
 
   // TODO: Add new route for new form
   // const addForm = () => {
@@ -45,12 +58,6 @@ export default function Home(props: { forms: Form[] }) {
   //   setForms(newForms);
   //   saveFormData(newForms);
   // };
-  const deleteForm = (id?: number) => {
-    console.log("Not implemened yet");
-    // const newForms = forms.filter((form: MyForm) => form.id !== id);
-    // setForms(newForms);
-    // saveFormData(newForms);
-  };
   return (
     <div className="py-2 w-full flex flex-col">
       <form
@@ -101,7 +108,7 @@ export default function Home(props: { forms: Form[] }) {
                   <img src={previewIcon} alt="open preview" className="w-6" />
                 </Link>
                 <button
-                  onClick={() => deleteForm(form.id)}
+                  onClick={() => removeForm(form.id || 0)}
                   className="p-2 bg-cyan-500 rounded-lg text-white"
                 >
                   <img src={deleteIcon} alt="delete" className="w-6" />

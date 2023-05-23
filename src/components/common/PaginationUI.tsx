@@ -42,6 +42,10 @@ export const PaginationUI = () => {
     fetchForms(offset, setPage);
   };
 
+  const updateForms = () => {
+    fetchForms(offset, setPage);
+  };
+
   return (
     <div className="flex flex-col w-full items-start justify-between border-t border-gray-200 bg-white px-4 py-2">
         {/* {page!.results.map((form: Form) => (
@@ -54,7 +58,7 @@ export const PaginationUI = () => {
             </div>
           </div>
         ))} */}
-        {page ? <Home forms={page.results} /> : ""}
+        {page ? <Home forms={page.results} updateFormsCB={updateForms} /> : ""}
       <div className="flex flex-1 justify-between sm:hidden w-full">
         {page!.previous ? (
           <button
