@@ -1,40 +1,82 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "raviger";
 import resetIcon from "../assets/reset.svg";
-import closeIcon from "../assets/logout.svg"
+import closeIcon from "../assets/logout.svg";
 import { FormItem, MyForm, inputOptions } from "../types/data";
-import { createFormFields, deleteFormFields, getForm, getFormFields, updateFormFields } from "../utils/apiUtils";
+import {
+  createFormFields,
+  deleteFormFields,
+  getForm,
+  getFormFields,
+  updateFormFields,
+} from "../utils/apiUtils";
 import DropdownLabel from "./DropdownLabel";
 import RadioLabel from "./RadioLabel";
 import InputLabel from "./InputLabel";
 
 // wrap in try catch
 
-const getFields = async (id: number, setFieldsCB: (value: FormItem[]) => void) => {
-  const data = await getFormFields(id);
-  setFieldsCB(data.results);
-}
+const getFields = async (
+  id: number,
+  setFieldsCB: (value: FormItem[]) => void
+) => {
+  try {
+    const data = await getFormFields(id);
+    setFieldsCB(data.results);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const getTitle = async (id: number, setTitleCB: (value: string) => void) => {
-  const data = await getForm(id);
-  setTitleCB(data.title);
-}
+  try {
+    const data = await getForm(id);
+    setTitleCB(data.title);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-const addField = async (id: number, field: FormItem, setFieldsCB: (value: FormItem[]) => void) => {
-  await createFormFields(id, field);
-  getFields(id, setFieldsCB);
-}
+const addField = async (
+  id: number,
+  field: FormItem,
+  setFieldsCB: (value: FormItem[]) => void
+) => {
+  try {
+    await createFormFields(id, field);
+    getFields(id, setFieldsCB);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-const updateField = async (form_pk: number, field: FormItem, id: number, setFieldsCB: (value: FormItem[]) => void) => {
-  await updateFormFields(form_pk, field, id);
-  getFields(form_pk, setFieldsCB);
-}
+const updateField = async (
+  form_pk: number,
+  field: FormItem,
+  id: number,
+  setFieldsCB: (value: FormItem[]) => void
+) => {
+  try {
+    await updateFormFields(form_pk, field, id);
+    getFields(form_pk, setFieldsCB);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-const deleteField = async (form_pk: number, id: number, setFieldsCB: (value: FormItem[]) => void) => {
-  await deleteFormFields(form_pk, id).then(() => {
-  getFields(form_pk, setFieldsCB);
-  });
-}
+const deleteField = async (
+  form_pk: number,
+  id: number,
+  setFieldsCB: (value: FormItem[]) => void
+) => {
+  try {
+    await deleteFormFields(form_pk, id).then(() => {
+      getFields(form_pk, setFieldsCB);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export default function FormUI(props: { id: number }) {
   const [title, setTitle] = useState("");
@@ -46,8 +88,6 @@ export default function FormUI(props: { id: number }) {
     getFields(props.id, setFields);
     getTitle(props.id, setTitle);
   }, []);
-
-  
 
   const titleRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -199,34 +239,9 @@ export default function FormUI(props: { id: number }) {
         </button>
       </div>
       <div className="flex flex-row gap-2 pt-2">
-        {/* <button
-          onClick={() => {
-            // saveFormData(formState);
-            console.log("Saving form not implemented");
-          }}
-          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
-        >
-          Save Form
-        </button> */}
         <Link href="/" className="bg-cyan-500 text-white p-2 rounded-md w-fit">
           <img src={closeIcon} alt="delete" className="w-8" />
         </Link>
-        <button
-          onClick={(_) =>
-            setFields(
-              fields.map((item) => {
-                return {
-                  ...item,
-                  value: "",
-                };
-              }
-              )
-            )
-          }
-          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
-        >
-          <img src={resetIcon} alt="delete" className="w-8" />
-        </button>
       </div>
     </div>
   );
