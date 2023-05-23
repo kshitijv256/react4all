@@ -3,11 +3,12 @@ import { Link } from "raviger";
 import resetIcon from "../assets/reset.svg";
 import closeIcon from "../assets/logout.svg"
 import { FormItem, MyForm, inputOptions } from "../types/data";
-import { getForm, getFormFields } from "../utils/apiUtils";
+import { createFormFields, getForm, getFormFields, updateFormFields } from "../utils/apiUtils";
 import DropdownLabel from "./DropdownLabel";
 import RadioLabel from "./RadioLabel";
 import InputLabel from "./InputLabel";
 
+// wrap in try catch
 
 const getFields = async (id: number, setFieldsCB: (value: FormItem[]) => void) => {
   const data = await getFormFields(id);
@@ -17,6 +18,16 @@ const getFields = async (id: number, setFieldsCB: (value: FormItem[]) => void) =
 const getTitle = async (id: number, setTitleCB: (value: string) => void) => {
   const data = await getForm(id);
   setTitleCB(data.title);
+}
+
+const addField = async (id: number, field: FormItem, setFieldsCB: (value: FormItem[]) => void) => {
+  await createFormFields(id, field);
+  getFields(id, setFieldsCB);
+}
+
+const updateField = async (form_pk: number, field: FormItem, id: number, setFieldsCB: (value: FormItem[]) => void) => {
+  await updateFormFields(form_pk, field, id);
+  getFields(form_pk, setFieldsCB);
 }
 
 export default function FormUI(props: { id: number }) {
@@ -44,7 +55,7 @@ export default function FormUI(props: { id: number }) {
   const getField = () => {
     if (type === "dropdown") {
       return {
-        kind: "dropdown",
+        kind: "DROPDOWN",
         id: Number(new Date()),
         label: fieldValue,
         value: "",
@@ -54,7 +65,7 @@ export default function FormUI(props: { id: number }) {
     }
     if (type === "textarea") {
       return {
-        kind: "textarea",
+        kind: "GENERIC",
         id: Number(new Date()),
         label: fieldValue,
         value: "",
@@ -63,7 +74,7 @@ export default function FormUI(props: { id: number }) {
     }
     if (type === "radio") {
       return {
-        kind: "radio",
+        kind: "RADIO",
         id: Number(new Date()),
         label: fieldValue,
         value: "",
@@ -72,7 +83,7 @@ export default function FormUI(props: { id: number }) {
       } as FormItem;
     }
     return {
-      kind: "text",
+      kind: "TEXT",
       id: Number(new Date()),
       label: fieldValue,
       type: type,
@@ -86,17 +97,11 @@ export default function FormUI(props: { id: number }) {
     setFields(newFields);
   };
   const changedCB = (newForm: FormItem, id: number) => {
-    const newFields = fields.map((item) => {
-      if (item.id === id) {
-        return newForm;
-      }
-      return item;
-    });
-    setFields(newFields);
+    updateField(props.id, newForm, id, setFields);
   };
 
   const getLabel = (item: FormItem) => {
-    if (item.kind === "dropdown") {
+    if (item.kind === "DROPDOWN") {
       return (
         <DropdownLabel
           removeFieldCB={removeField}
@@ -107,7 +112,7 @@ export default function FormUI(props: { id: number }) {
         />
       );
     }
-    if (item.kind === "radio") {
+    if (item.kind === "RADIO") {
       return (
         <RadioLabel
           removeFieldCB={removeField}
@@ -179,7 +184,7 @@ export default function FormUI(props: { id: number }) {
               return;
             }
             const newField = getField();
-            setFields([...fields, newField]);
+            addField(props.id, newField, setFields);
             setFieldValue("");
           }}
         >

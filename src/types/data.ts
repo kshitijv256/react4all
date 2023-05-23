@@ -27,7 +27,7 @@ export const validateForm = (form: Form) => {
 export type textFieldTypes = "text" | "email" | "tel" | "date" | "number";
 
 export type textField = {
-  kind: "text";
+  kind: "TEXT";
   id: number;
   label: string;
   type: textFieldTypes;
@@ -36,7 +36,7 @@ export type textField = {
 };
 
 export type DropDownField = {
-  kind: "dropdown";
+  kind: "DROPDOWN";
   id: number;
   label: string;
   value: string;
@@ -45,7 +45,7 @@ export type DropDownField = {
 };
 
 export type RadioField = {
-  kind: "radio";
+  kind: "RADIO";
   id: number;
   label: string;
   value: string;
@@ -54,7 +54,7 @@ export type RadioField = {
 };
 
 export type TextAreaField = {
-  kind: "textarea";
+  kind: "GENERIC";
   id: number;
   label: string;
   value: string;
@@ -62,7 +62,7 @@ export type TextAreaField = {
 };
 
 export type SliderField = {
-  kind: "slider";
+  kind: "GENERIC";
   id: number;
   label: string;
   value: number;
@@ -73,60 +73,60 @@ export type SliderField = {
 
 export type FormItem = textField | DropDownField | TextAreaField | RadioField;
 
-export const formItems: FormItem[] = [
-  {
-    kind: "text",
-    id: 1,
-    label: "First Name",
-    type: "text",
-    value: "",
-    placeholder: "Enter your first name",
-  },
-  {
-    kind: "text",
-    id: 2,
-    label: "Last Name",
-    type: "text",
-    value: "",
-    placeholder: "Enter your last name",
-  },
-  {
-    kind: "text",
-    id: 3,
-    label: "Email",
-    type: "email",
-    value: "",
-    placeholder: "Enter your email",
-  },
-  {
-    kind: "text",
-    id: 4,
-    label: "Phone Number",
-    type: "tel",
-    value: "",
-    placeholder: "Enter your phone number",
-  },
-  {
-    kind: "text",
-    id: 5,
-    label: "Date of Birth",
-    type: "date",
-    value: "",
-    placeholder: "Enter your date of birth",
-  },
-  {
-    kind: "dropdown",
-    id: 6,
-    label: "Gender",
-    value: "",
-    options: [
-      { selected: false, value: "Male" },
-      { selected: false, value: "Female" },
-      { selected: false, value: "Other" },
-    ],
-    placeholder: "Select Gender",
-  },
-];
+// export const formItems: FormItem[] = [
+//   {
+//     kind: "TEXT",
+//     id: 1,
+//     label: "First Name",
+//     type: "text",
+//     value: "",
+//     placeholder: "Enter your first name",
+//   },
+//   {
+//     kind: "TEXT",
+//     id: 2,
+//     label: "Last Name",
+//     type: "text",
+//     value: "",
+//     placeholder: "Enter your last name",
+//   },
+//   {
+//     kind: "text",
+//     id: 3,
+//     label: "Email",
+//     type: "email",
+//     value: "",
+//     placeholder: "Enter your email",
+//   },
+//   {
+//     kind: "text",
+//     id: 4,
+//     label: "Phone Number",
+//     type: "tel",
+//     value: "",
+//     placeholder: "Enter your phone number",
+//   },
+//   {
+//     kind: "text",
+//     id: 5,
+//     label: "Date of Birth",
+//     type: "date",
+//     value: "",
+//     placeholder: "Enter your date of birth",
+//   },
+//   {
+//     kind: "dropdown",
+//     id: 6,
+//     label: "Gender",
+//     value: "",
+//     options: [
+//       { selected: false, value: "Male" },
+//       { selected: false, value: "Female" },
+//       { selected: false, value: "Other" },
+//     ],
+//     placeholder: "Select Gender",
+//   },
+// ];
 
 export const inputOptions = [
   { value: "text", label: "Text" },

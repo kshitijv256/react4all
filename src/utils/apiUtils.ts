@@ -2,7 +2,7 @@
 
 import { get } from "http";
 import { PaginationParams } from "../types/common";
-import { Form } from "../types/data";
+import { Form, FormItem } from "../types/data";
 
 const API_BASE_URL = "https://tsapi.coronasafe.live/api/";
 
@@ -73,4 +73,12 @@ export const getForm = async (id: number) => {
 
 export const getFormFields = async (form_pk: number) => {
     return await request(`forms/${form_pk}/fields/`, "GET");
+}
+
+export const createFormFields = async (form_pk: number, fields: FormItem) => {
+    return await request(`forms/${form_pk}/fields/`, "POST", fields);
+}
+
+export const updateFormFields = async (form_pk: number, fields: FormItem, id: number) => {
+    return await request(`forms/${form_pk}/fields/${id}/`, "PATCH", fields);
 }

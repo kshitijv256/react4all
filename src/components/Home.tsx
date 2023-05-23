@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Form, FormItem, MyForm, formItems } from "../types/data";
+import { Form, FormItem, MyForm } from "../types/data";
 import deleteIcon from "../assets/delete.svg";
 import editIcon from "../assets/login.svg";
 import previewIcon from "../assets/preview.svg";

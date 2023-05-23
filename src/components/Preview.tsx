@@ -76,7 +76,7 @@ const reducer = (state: FormItem[], action: Actions) => {
     }
     case "SELECT_OPTION": {
       const newState = state.map((field) => {
-        if (field.id === action.id && field.kind === "dropdown") {
+        if (field.id === action.id && field.kind === "DROPDOWN") {
           return {
             ...field,
             options: field.options.map((option) => {
@@ -99,7 +99,7 @@ const reducer = (state: FormItem[], action: Actions) => {
     }
     case "SELECT_RADIO": {
       const newState = state.map((field) => {
-        if (field.id === action.id && field.kind === "radio") {
+        if (field.id === action.id && field.kind === "RADIO") {
           return {
             ...field,
             value:
@@ -153,7 +153,7 @@ export default function Preview(props: { formId: number }) {
   };
 
   const renderField = (field: FormItem) => {
-    if (field.kind === "text") {
+    if (field.kind === "TEXT") {
       return (
         <div>
           <label className="text-sm font-semibold pt-2">
@@ -168,7 +168,7 @@ export default function Preview(props: { formId: number }) {
         </div>
       );
     }
-    if (field.kind === "textarea") {
+    if (field.kind === "GENERIC") {
       return (
         <div>
           <label className="text-sm font-semibold pt-2">
@@ -184,10 +184,10 @@ export default function Preview(props: { formId: number }) {
         </div>
       );
     }
-    if (field.kind === "dropdown") {
+    if (field.kind === "DROPDOWN") {
       return <DropDown field={form.fields[state]} selectCB={selectOption} />;
     }
-    if (field.kind === "radio") {
+    if (field.kind === "RADIO") {
       return <RadioInput field={field} selectCB={selectRadio} />;
     }
   };
