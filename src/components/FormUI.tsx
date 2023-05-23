@@ -1,20 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "raviger";
-import resetIcon from "../assets/reset.svg";
 import closeIcon from "../assets/logout.svg";
+import editIcon from "../assets/edit.svg";
 import { FormItem, MyForm, inputOptions } from "../types/data";
 import {
   createFormFields,
   deleteFormFields,
   getForm,
   getFormFields,
+  updateForm,
   updateFormFields,
 } from "../utils/apiUtils";
 import DropdownLabel from "./DropdownLabel";
 import RadioLabel from "./RadioLabel";
 import InputLabel from "./InputLabel";
 
-// wrap in try catch
 
 const getFields = async (
   id: number,
@@ -36,6 +36,16 @@ const getTitle = async (id: number, setTitleCB: (value: string) => void) => {
     console.log(err);
   }
 };
+
+const updateTitle = async (id: number, title: string) => {
+  try {
+    let data = await getForm(id);
+    data.title = title;
+    await updateForm(data, id);
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 const addField = async (
   id: number,
@@ -185,6 +195,7 @@ export default function FormUI(props: { id: number }) {
     <div className="flex flex-col gap-4 p-2 divide-y divide-double divide-gray-300">
       <div className="flex-1">
         <label className="text-sm font-semibold">Title</label>
+        <div className="flex p-1">
         <input
           type="text"
           value={title}
@@ -192,8 +203,15 @@ export default function FormUI(props: { id: number }) {
             setTitle(e.target.value);
           }}
           ref={titleRef}
-          className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full mt-2"
+          className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full mr-2"
         />
+        <button
+          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+          onClick={(_) => updateTitle(props.id, title)}
+        >
+          {<img src={editIcon} alt="delete" className="w-8" />}
+        </button>
+        </div>
         <div className="flex flex-col gap-4 mt-4">
           <h2 className="font-semibold">Questions</h2>
           {fields.map((item) => getLabel(item))}
