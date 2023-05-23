@@ -15,7 +15,6 @@ import DropdownLabel from "./DropdownLabel";
 import RadioLabel from "./RadioLabel";
 import InputLabel from "./InputLabel";
 
-
 const getFields = async (
   id: number,
   setFieldsCB: (value: FormItem[]) => void
@@ -45,7 +44,7 @@ const updateTitle = async (id: number, title: string) => {
   } catch (err) {
     console.log(err);
   }
-}
+};
 
 const addField = async (
   id: number,
@@ -116,6 +115,7 @@ export default function FormUI(props: { id: number }) {
         kind: "DROPDOWN",
         id: Number(new Date()),
         label: fieldValue,
+        type: "",
         value: "",
         options: [],
         placeholder: "",
@@ -136,6 +136,7 @@ export default function FormUI(props: { id: number }) {
         id: Number(new Date()),
         label: fieldValue,
         value: "",
+        type: "",
         options: [],
         placeholder: "",
       } as FormItem;
@@ -196,21 +197,21 @@ export default function FormUI(props: { id: number }) {
       <div className="flex-1">
         <label className="text-sm font-semibold">Title</label>
         <div className="flex p-1">
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
-          ref={titleRef}
-          className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full mr-2"
-        />
-        <button
-          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
-          onClick={(_) => updateTitle(props.id, title)}
-        >
-          {<img src={editIcon} alt="delete" className="w-8" />}
-        </button>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+            ref={titleRef}
+            className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full mr-2"
+          />
+          <button
+            className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+            onClick={(_) => updateTitle(props.id, title)}
+          >
+            {<img src={editIcon} alt="delete" className="w-8" />}
+          </button>
         </div>
         <div className="flex flex-col gap-4 mt-4">
           <h2 className="font-semibold">Questions</h2>

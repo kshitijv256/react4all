@@ -9,18 +9,15 @@ import { User } from "../types/User";
 import { PaginationUI } from "../components/common/PaginationUI";
 import FormUI from "../components/FormUI";
 
-
-
 const routes = {
   "/": () => <PaginationUI />,
   "/login": () => <Login />,
   "/about": () => <About />,
-  "/form/:id": ({ id }: { id: string }) => <FormUI id={Number(id)}/>,
-  "/preview/:formId": ({ formId }: { formId: string }) => {
-    const forms = JSON.parse(localStorage.getItem("forms") || "[]");
-    const isthere = forms.find((form: MyForm) => form.id === Number(formId));
-    return isthere ? <Preview formId={Number(formId)} /> : <NotFound />;
-  },
+  "/form/:id": ({ id }: { id: string }) => <FormUI id={Number(id)} />,
+  "/preview/:formId": ({ formId }: { formId: string }) => (
+    <Preview formId={Number(formId)} />
+  ),
+  "/success": () => <div>Success</div>,
   "*": () => <NotFound />,
 };
 

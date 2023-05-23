@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Form, FormItem, MyForm } from "../types/data";
+import { Form } from "../types/data";
 import deleteIcon from "../assets/delete.svg";
 import editIcon from "../assets/login.svg";
 import previewIcon from "../assets/preview.svg";
@@ -7,24 +7,7 @@ import searchIcon from "../assets/search.svg";
 import { Link, useQueryParams } from "raviger";
 import Modal from "./common/Modal";
 import CreateForm from "./CreateForm";
-import { deleteForm, listForms } from "../utils/apiUtils";
-
-// const getForms = () => {
-//   const forms = localStorage.getItem("forms");
-//   if (forms) {
-//     return JSON.parse(forms);
-//   }
-//   return [];
-// };
-// const saveFormData = (data: MyForm[]) => {
-//   localStorage.setItem("forms", JSON.stringify(data));
-// };
-
-// const fetchForms = async (setformsCB: (value: MyForm[]) => void) => {
-//   const forms = await listForms({ limit: 3, offset: 0 });
-//   setformsCB(forms.results);
-//   return forms;
-// };
+import { deleteForm } from "../utils/apiUtils";
 
 const removeFormAS = async (id: number, updateCB: () => void) => {
   try {
@@ -33,9 +16,12 @@ const removeFormAS = async (id: number, updateCB: () => void) => {
   } catch (err) {
     console.log(err);
   }
-}
+};
 
-export default function Home(props: { forms: Form[], updateFormsCB: () => void }) {
+export default function Home(props: {
+  forms: Form[];
+  updateFormsCB: () => void;
+}) {
   const [{ search }, setQuery] = useQueryParams();
   const [searchText, setSearchText] = useState(search || "");
   const [newForm, setNewForm] = useState(false);
@@ -49,15 +35,6 @@ export default function Home(props: { forms: Form[], updateFormsCB: () => void }
     removeFormAS(id, props.updateFormsCB);
   };
 
-  // TODO: Add new route for new form
-  // const addForm = () => {
-  //   const newForms = [
-  //     ...forms,
-  //     { id: Number(new Date()), title: "Untitled Form", fields: formItems },
-  //   ];
-  //   setForms(newForms);
-  //   saveFormData(newForms);
-  // };
   return (
     <div className="py-2 w-full flex flex-col">
       <form

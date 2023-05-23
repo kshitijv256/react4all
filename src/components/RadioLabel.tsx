@@ -61,8 +61,8 @@ export default function RadioLabel(props: {
       </div>
       <div>
         {props.item.options.length === 0 ? (
-          <div className="bg-red-300 rounded p-2 text-gray-800">
-            Add at least one option
+          <div className="bg-red-400 text-white rounded p-2">
+            Must have at least one option to be visible
           </div>
         ) : null}
       </div>

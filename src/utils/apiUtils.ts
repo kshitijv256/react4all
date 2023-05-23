@@ -2,7 +2,7 @@
 
 import { get } from "http";
 import { PaginationParams } from "../types/common";
-import { Form, FormItem } from "../types/data";
+import { Form, FormItem, Submission } from "../types/data";
 
 const API_BASE_URL = "https://tsapi.coronasafe.live/api/";
 
@@ -34,7 +34,7 @@ export const request = async (
 
     // Token auth
     const token = localStorage.getItem("token");
-    const auth = token ?  "Token " + token : "";
+    const auth = token ? "Token " + token : "";
     const response = await fetch(url, {
         method,
         headers: {
@@ -44,11 +44,11 @@ export const request = async (
         body: method !== "GET" ? payload : undefined,
     });
     if (response.ok) {
-        try{
+        try {
             const data = await response.json();
             return data;
         }
-        catch(err){
+        catch (err) {
             return {};
         }
     } else {
@@ -57,7 +57,7 @@ export const request = async (
     }
 };
 
-export const createForm = (form:Form) => {
+export const createForm = (form: Form) => {
     return request("forms/", "POST", form);
 }
 
@@ -99,4 +99,8 @@ export const updateFormFields = async (form_pk: number, fields: FormItem, id: nu
 
 export const deleteFormFields = async (form_pk: number, id: number) => {
     return await request(`forms/${form_pk}/fields/${id}/`, "DELETE");
+}
+
+export const submitSubmission = async (form_pk: number, submission: Submission) => {
+    return await request(`forms/${form_pk}/submission/`, "POST", submission);
 }
