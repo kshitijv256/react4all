@@ -137,8 +137,25 @@ const reducer = (state: FormItem[], action: Actions) => {
           return field;
         }
       });
+      const stateWithValues = newState.map((field) => {
+        if (field.kind === "DROPDOWN") {
+          return {
+            ...field,
+            value: field.options.map((option) => {
+              if (option.selected) {
+                return option.value;
+              } else {
+                return "";
+              }
+            },
+            ).join(","),
+          };
+        } else {
+          return field;
+        }
+      });
       // saveForm(newState, action.formId);
-      return newState;
+      return stateWithValues;
     }
     case "SELECT_RADIO": {
       const newState = state.map((field) => {
