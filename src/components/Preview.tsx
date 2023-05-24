@@ -46,12 +46,14 @@ const prepareSubmission = async (state: FormItem[], id: number) => {
 };
 
 const submitForm = async (form_pk: number, formState: FormItem[]) => {
+  if (formState.length === 0) {
+    return false;
+  }
   try {
     const submission = await prepareSubmission(formState, form_pk);
     const response = await submitSubmission(form_pk, submission);
     console.log(response);
     return true;
-    return response;
   } catch (err: any) {
     console.log(err);
     return false;
