@@ -14,6 +14,7 @@ import {
 import DropdownLabel from "./DropdownLabel";
 import RadioLabel from "./RadioLabel";
 import InputLabel from "./InputLabel";
+import { User } from "../types/User";
 
 const getFields = async (
   id: number,
@@ -87,15 +88,17 @@ const deleteField = async (
   }
 };
 
-export default function FormUI(props: { id: number }) {
+export default function FormUI(props: { id: number; currentUser: User }) {
   const [title, setTitle] = useState("");
   const [fieldValue, setFieldValue] = useState("");
   const [type, setType] = useState("text");
   const [fields, setFields] = useState<FormItem[]>([]);
 
   useEffect(() => {
-    getFields(props.id, setFields);
-    getTitle(props.id, setTitle);
+    if (props.currentUser.url) {
+      getFields(props.id, setFields);
+      getTitle(props.id, setTitle);
+    }
   }, []);
 
   const titleRef = useRef<HTMLInputElement>(null);
@@ -191,6 +194,16 @@ export default function FormUI(props: { id: number }) {
       />
     );
   };
+
+  if (!props.currentUser.url) {
+    return (
+      <div className="flex flex-col gap-4 p-2 divide-y divide-double divide-gray-300">
+        <div className="flex-1">
+          <h1>Unauthorized for this action</h1>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 p-2 divide-y divide-double divide-gray-300">

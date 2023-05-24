@@ -8,6 +8,7 @@ import { Link, useQueryParams } from "raviger";
 import Modal from "./common/Modal";
 import CreateForm from "./CreateForm";
 import { deleteForm } from "../utils/apiUtils";
+import { User } from "../types/User";
 
 const removeFormAS = async (id: number, updateCB: () => void) => {
   try {
@@ -21,6 +22,7 @@ const removeFormAS = async (id: number, updateCB: () => void) => {
 export default function Home(props: {
   forms: Form[];
   updateFormsCB: () => void;
+  currentUser: User;
 }) {
   const [{ search }, setQuery] = useQueryParams();
   const [searchText, setSearchText] = useState(search || "");
@@ -67,39 +69,64 @@ export default function Home(props: {
         .map((form: Form) => {
           return (
             <div
-              className="py-3 flex items-center justify-between"
+              className="py-2 my-2 px-2 flex items-center justify-between border-l-2 border-gray-300 rounded bg-gray-100"
               key={form.id}
             >
               <h1 className="text-xl text-gray-800">{form.title}</h1>
               <div className="flex gap-2">
-                <Link
-                  href={`/form/${form.id}`}
-                  className="p-2 bg-cyan-500 rounded-lg text-white"
-                >
-                  <img src={editIcon} alt="open" className="w-6" />
-                </Link>
-                <Link
-                  href={`/preview/${form.id}`}
-                  className="p-2 bg-cyan-500 rounded-lg text-white"
-                >
-                  <img src={previewIcon} alt="open preview" className="w-6" />
-                </Link>
-                <button
-                  onClick={() => removeForm(form.id || 0)}
-                  className="p-2 bg-cyan-500 rounded-lg text-white"
-                >
-                  <img src={deleteIcon} alt="delete" className="w-6" />
-                </button>
+                {props.currentUser.url ? (
+                  <div>
+                    <Link
+                      href={`/form/${form.id}`}
+                      className="p-2 bg-cyan-500 rounded-lg text-white"
+                    >
+                      <img src={editIcon} alt="open" className="w-6" />
+                    </Link>
+                    <Link
+                      href={`/preview/${form.id}`}
+                      className="p-2 bg-cyan-500 rounded-lg text-white"
+                    >
+                      <img
+                        src={previewIcon}
+                        alt="open preview"
+                        className="w-6"
+                      />
+                    </Link>
+                    <button
+                      onClick={() => removeForm(form.id || 0)}
+                      className="p-2 bg-cyan-500 rounded-lg text-white"
+                    >
+                      <img src={deleteIcon} alt="delete" className="w-6" />
+                    </button>
+                  </div>
+                ) : (
+                  //   <Link
+                  //   href={`/preview/${form.id}`}
+                  //   className="p-2 bg-cyan-500 rounded-lg text-white flex gap-2"
+                  // > Preview
+                  //   <img src={previewIcon} alt="open preview" className="w-6" />
+                  // </Link>
+                  <div></div>
+                )}
               </div>
             </div>
           );
         })}
-      <button
-        onClick={(_) => setNewForm(true)}
-        className="p-2 mt-4 bg-cyan-500 rounded-lg text-white text-lg font-semibold"
-      >
-        + Add Form
-      </button>
+      {props.currentUser.url ? (
+        <button
+          onClick={(_) => setNewForm(true)}
+          className="p-2 mt-4 bg-cyan-500 rounded-lg text-white text-lg font-semibold"
+        >
+          + Add Form
+        </button>
+      ) : (
+        <button
+          onClick={(_) => {}}
+          className="p-2 mt-4 bg-cyan-500/70 rounded-lg text-white text-lg font-semibold cursor-not-allowed"
+        >
+          Login to Add Form
+        </button>
+      )}
       <Modal
         open={newForm}
         closeCB={() => {

@@ -9,19 +9,22 @@ import { User } from "../types/User";
 import { PaginationUI } from "../components/common/PaginationUI";
 import FormUI from "../components/FormUI";
 
-const routes = {
-  "/": () => <PaginationUI />,
-  "/login": () => <Login />,
-  "/about": () => <About />,
-  "/form/:id": ({ id }: { id: string }) => <FormUI id={Number(id)} />,
-  "/preview/:formId": ({ formId }: { formId: string }) => (
-    <Preview formId={Number(formId)} />
-  ),
-  "/success": () => <div>Success</div>,
-  "*": () => <NotFound />,
-};
 
 export default function AppRouter(currentuser: User) {
+
+  const routes = {
+    "/": () => <PaginationUI currentUser={currentuser}/>,
+    "/login": () => <Login />,
+    "/about": () => <About />,
+    "/form/:id": ({ id }: { id: string }) => <FormUI id={Number(id)} currentUser={currentuser} />,
+    "/preview/:formId": ({ formId }: { formId: string }) => (
+      <Preview formId={Number(formId)} />
+    ),
+    "/success": () => <div>Success</div>,
+    "*": () => <NotFound />,
+  };
+
+
   const routeResult = useRoutes(routes);
-  return routeResult || <div className="h-screen flex items-center"> </div>;
+  return routeResult || <NotFound />;
 }

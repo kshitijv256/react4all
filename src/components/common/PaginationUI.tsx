@@ -3,6 +3,7 @@ import { Pagination } from "../../types/common";
 import { Form } from "../../types/data";
 import { listForms } from "../../utils/apiUtils";
 import Home from "../Home";
+import { User } from "../../types/User";
 
 const fetchForms = async (
   offset: number,
@@ -12,7 +13,7 @@ const fetchForms = async (
   setPageCB(forms);
 };
 
-export const PaginationUI = () => {
+export const PaginationUI = (currentUser:User) => {
   const [offset, setOffset] = useState<number>(0);
   const [page, setPage] = useState<Pagination<Form>>({
     count: 0,
@@ -58,7 +59,7 @@ export const PaginationUI = () => {
             </div>
           </div>
         ))} */}
-        {page ? <Home forms={page.results} updateFormsCB={updateForms} /> : ""}
+        {page ? <Home forms={page.results} updateFormsCB={updateForms} currentUser={currentUser} /> : ""}
       <div className="flex flex-1 justify-between sm:hidden w-full">
         {page!.previous ? (
           <button
