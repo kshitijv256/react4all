@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "raviger";
 import closeIcon from "../assets/logout.svg";
 import editIcon from "../assets/edit.svg";
-import { FormItem, MyForm, inputOptions } from "../types/data";
+import { FormItem, inputOptions } from "../types/data";
 import {
   createFormFields,
   deleteFormFields,
@@ -37,6 +37,15 @@ const getTitle = async (id: number, setTitleCB: (value: string) => void) => {
   }
 };
 
+const getPublic = async (id: number, setPublicCB: (value: boolean) => void) => {
+  try {
+    const data = await getForm(id);
+    setPublicCB(data.is_public);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const updateTitle = async (id: number, title: string) => {
   try {
     let data = await getForm(id);
@@ -55,7 +64,7 @@ const updatePublic = async (id: number, isPublic: boolean) => {
   } catch (err) {
     console.log(err);
   }
-}
+};
 
 const addField = async (
   id: number,
@@ -103,13 +112,15 @@ export default function FormUI(props: { id: number; currentUser: User }) {
   const [fieldValue, setFieldValue] = useState("");
   const [type, setType] = useState("text");
   const [fields, setFields] = useState<FormItem[]>([]);
+  const [isPublic, setIsPublic] = useState(false);
 
   useEffect(() => {
     if (props.currentUser.username !== "") {
       getFields(props.id, setFields);
       getTitle(props.id, setTitle);
+      getPublic(props.id, setIsPublic);
     }
-  }, []);
+  }, [props.id, props.currentUser]);
 
   const titleRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -209,7 +220,9 @@ export default function FormUI(props: { id: number; currentUser: User }) {
     return (
       <div className="flex flex-col gap-4 p-2 divide-y divide-double divide-gray-300">
         <div className="flex-1">
-          <h1 className="p-4 text-xl font-semibold text-red-600">Unauthorized for this action</h1>
+          <h1 className="p-4 text-xl font-semibold text-red-600">
+            Unauthorized for this action
+          </h1>
         </div>
       </div>
     );
@@ -237,11 +250,16 @@ export default function FormUI(props: { id: number; currentUser: User }) {
           </button>
         </div>
         <div className="py-1 flex gap-2">
-          <input type="checkbox" name="isPublic" id="isPublic" onChange={
-            (e) => {
+          <input
+            type="checkbox"
+            name="isPublic"
+            id="isPublic"
+            checked={isPublic}
+            onChange={(e) => {
               updatePublic(props.id, e.target.checked);
-            }
-          }/>
+              setIsPublic(e.target.checked);
+            }}
+          />
           <label htmlFor="isPublic">Is Public?</label>
         </div>
         <div className="flex flex-col gap-4 mt-4">

@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { MyForm, FormItem, Submission, Answer } from "../types/data";
+import { FormItem, Submission, Answer } from "../types/data";
 import DropDown from "./DropDown";
 import { Link, navigate } from "raviger";
 import closeIcon from "../assets/close.svg";
@@ -143,14 +143,15 @@ const reducer = (state: FormItem[], action: Actions) => {
         if (field.kind === "DROPDOWN") {
           return {
             ...field,
-            value: field.options.map((option) => {
-              if (option.selected) {
-                return option.value;
-              } else {
-                return "";
-              }
-            },
-            ).join(","),
+            value: field.options
+              .map((option) => {
+                if (option.selected) {
+                  return option.value;
+                } else {
+                  return "";
+                }
+              })
+              .join(","),
           };
         } else {
           return field;
