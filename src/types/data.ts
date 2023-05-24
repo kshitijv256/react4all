@@ -19,6 +19,7 @@ export type Answer = {
 export type Submission = {
   answers: Answer[];
   form: Form;
+  id?: number;
 };
 
 export type Error<T> = Partial<Record<keyof T, string>>;

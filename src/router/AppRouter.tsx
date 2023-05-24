@@ -8,6 +8,7 @@ import Login from "../components/Login";
 import { User } from "../types/User";
 import { PaginationUI } from "../components/common/PaginationUI";
 import FormUI from "../components/FormUI";
+import { PaginationSub } from "../components/common/PaginationSub";
 
 
 export default function AppRouter(props: {currentUser: User}) {
@@ -20,6 +21,7 @@ export default function AppRouter(props: {currentUser: User}) {
     "/preview/:formId": ({ formId }: { formId: string }) => (
       <Preview formId={Number(formId)} />
     ),
+    "/submission/:formId": ({ formId }: { formId: string }) => <PaginationSub form_pk={Number(formId)} currentUser={props.currentUser} />,
     "/success": () => <div>Success</div>,
     "*": () => <NotFound />,
   };

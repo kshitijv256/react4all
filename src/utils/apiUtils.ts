@@ -104,3 +104,11 @@ export const deleteFormFields = async (form_pk: number, id: number) => {
 export const submitSubmission = async (form_pk: number, submission: Submission) => {
     return await request(`forms/${form_pk}/submission/`, "POST", submission);
 }
+
+export const listSubmissions = async (form_pk: number, params: PaginationParams) => {
+    return await request(`forms/${form_pk}/submission/`, "GET", params);
+}
+
+export const getField = async (form_pk: number, field_pk: number) => {
+    return await request(`forms/${form_pk}/fields/${field_pk}/`, "GET");
+}
