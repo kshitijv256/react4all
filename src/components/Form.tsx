@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useReducer } from "react";
-import { FormItem, MyForm, formItems, inputOptions } from "../types/data";
+import { FormItem, MyForm, inputOptions } from "../types/data";
 import resetIcon from "../assets/reset.svg";
 import closeIcon from "../assets/logout.svg";
 import { Link } from "raviger";
@@ -28,7 +28,7 @@ const getFormData: () => MyForm[] = () => {
     {
       id: Number(new Date()),
       title: "Untitled Form",
-      fields: formItems,
+      fields: [],
     },
   ];
 };
@@ -168,7 +168,7 @@ export default function Form(props: { id: number }) {
   const getField = () => {
     if (type === "dropdown") {
       return {
-        kind: "dropdown",
+        kind: "DROPDOWN",
         id: Number(new Date()),
         label: fieldValue,
         value: "",
@@ -178,7 +178,7 @@ export default function Form(props: { id: number }) {
     }
     if (type === "textarea") {
       return {
-        kind: "textarea",
+        kind: "GENERIC",
         id: Number(new Date()),
         label: fieldValue,
         value: "",
@@ -187,7 +187,7 @@ export default function Form(props: { id: number }) {
     }
     if (type === "radio") {
       return {
-        kind: "radio",
+        kind: "RADIO",
         id: Number(new Date()),
         label: fieldValue,
         value: "",
@@ -196,7 +196,7 @@ export default function Form(props: { id: number }) {
       } as FormItem;
     }
     return {
-      kind: "text",
+      kind: "TEXT",
       id: Number(new Date()),
       label: fieldValue,
       type: type,
@@ -222,7 +222,7 @@ export default function Form(props: { id: number }) {
   };
 
   const getLabel = (item: FormItem) => {
-    if (item.kind === "dropdown") {
+    if (item.kind === "DROPDOWN") {
       return (
         <DropdownLabel
           removeFieldCB={removeField}
@@ -233,7 +233,7 @@ export default function Form(props: { id: number }) {
         />
       );
     }
-    if (item.kind === "radio") {
+    if (item.kind === "RADIO") {
       return (
         <RadioLabel
           removeFieldCB={removeField}

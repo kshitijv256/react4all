@@ -1,29 +1,32 @@
 import React from "react";
-import Home from "../components/Home";
-import Form from "../components/Form";
 import { useRoutes } from "raviger";
 import Preview from "../components/Preview";
 import About from "../components/About";
 import NotFound from "../components/404page";
-import { MyForm } from "../types/data";
+import { Form, MyForm } from "../types/data";
+import Login from "../components/Login";
+import { User } from "../types/User";
+import { PaginationUI } from "../components/common/PaginationUI";
+import FormUI from "../components/FormUI";
+import { PaginationSub } from "../components/common/PaginationSub";
 
-const routes = {
-  "/": () => <Home />,
-  "/about": () => <About />,
-  "/form/:id": ({ id }: { id: string }) => {
-    const forms = JSON.parse(localStorage.getItem("forms") || "[]");
-    const isthere = forms.find((form: MyForm) => form.id === Number(id));
-    return isthere ? <Form id={Number(id)} /> : <NotFound />;
-  },
-  "/preview/:formId": ({ formId }: { formId: string }) => {
-    const forms = JSON.parse(localStorage.getItem("forms") || "[]");
-    const isthere = forms.find((form: MyForm) => form.id === Number(formId));
-    return isthere ? <Preview formId={Number(formId)} /> : <NotFound />;
-  },
-  "*": () => <NotFound />,
-};
 
-export default function AppRouter() {
+export default function AppRouter(props: {currentUser: User}) {
+
+  const routes = {
+    "/": () => <PaginationUI currentUser={props.currentUser}/>,
+    "/login": () => <Login />,
+    "/about": () => <About />,
+    "/form/:id": ({ id }: { id: string }) => <FormUI id={Number(id)} currentUser={props.currentUser} />,
+    "/preview/:formId": ({ formId }: { formId: string }) => (
+      <Preview formId={Number(formId)} />
+    ),
+    "/submission/:formId": ({ formId }: { formId: string }) => <PaginationSub form_pk={Number(formId)} currentUser={props.currentUser} />,
+    "/success": () => <div className="w-full text-center text-3xl p-10 font-bold text-green-500">Submitted Successfully</div>,
+    "*": () => <NotFound />,
+  };
+
+
   const routeResult = useRoutes(routes);
-  return routeResult || <div className="h-screen flex items-center"> </div>;
+  return routeResult || <NotFound />;
 }

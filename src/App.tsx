@@ -1,22 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import AppRouter from "./router/AppRouter";
 import { Link } from "raviger";
+import { me } from "./utils/apiUtils";
+import { User } from "./types/User";
 
+const getCurrentUser = async (setCurrentUser: (value: User) => void) => {
+  const currentUser = await me();
+  setCurrentUser(currentUser);
+};
 function App() {
+  const [currentUser, setCurrentUser] = useState<User>({
+    username: "",
+  });
+  useEffect(() => {
+    getCurrentUser(setCurrentUser);
+  }, []);
   return (
     <div className="flex flex-col min-h-screen bg-gray-200 items-center">
-      <div className="flex fixed  text-xl bg-transparent w-full px-2 justify-end">
-        <Link href="/">
-          <div className="p-2 hover:bg-cyan-300">Home</div>
-        </Link>
-        <Link href="/about">
-          <div className="p-2 hover:bg-cyan-300">About</div>
-        </Link>
-      </div>
       <div className="w-3/5 lg:w-2/5 p-4 my-10 mx-auto bg-white shadow-lg rounded-xl flex flex-col">
-        <Header title="Level 6 Submission" />
-        <AppRouter />
+        <Header currentUser={currentUser} />
+        <div className="flex justify-between items-center">
+          { currentUser && currentUser.username?.length > 0 ? <h1 className="text-xl capitalize pl-4 pt-4 text-sky-700 font-semibold">User: {currentUser.username}</h1>: "" }
+        </div>
+        <AppRouter currentUser={currentUser}/>
       </div>
     </div>
   );

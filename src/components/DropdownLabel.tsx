@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import deleteIcon from "../assets/delete.svg";
 import { DropDownField, FormItem } from "../types/data";
+import editIcon from "../assets/edit.svg";
 import trashIcon from "../assets/trash.png";
 import plusicon from "../assets/plus.png";
 
@@ -10,6 +11,7 @@ export default function DropDownLabel(props: {
   changedCB: (newForm: FormItem, id: number) => void;
   id: number;
 }) {
+  const [label, setLabel] = useState(props.item.label);
   const [opText, setOpText] = useState("");
   const addOption = (value: string) => {
     if (value === "") return;
@@ -29,18 +31,28 @@ export default function DropDownLabel(props: {
     props.changedCB(newForm, props.id);
   };
 
+  const updateLabel = () => {
+    const newForm = { ...props.item, label: label };
+    props.changedCB(newForm, props.id);
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex w-full gap-2">
         <input
           className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full"
           type="text"
-          value={props.item.label}
+          value={label}
           onChange={(e) => {
-            const newForm = { ...props.item, label: e.target.value };
-            props.changedCB(newForm, props.id);
+            setLabel(e.target.value);
           }}
         />
+        <button
+          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+          onClick={(_) => updateLabel()}
+        >
+          {<img src={editIcon} alt="delete" className="w-8" />}
+        </button>
         <button
           className="bg-cyan-500 text-white p-2 rounded-md w-fit"
           onClick={(_) => props.removeFieldCB(props.id)}
@@ -50,8 +62,8 @@ export default function DropDownLabel(props: {
       </div>
       <div>
         {props.item.options.length === 0 ? (
-          <div className="bg-red-300 rounded p-2 text-gray-800">
-            Add at least one option
+          <div className="bg-red-400 text-white rounded p-2">
+            Must have at least one option to be visible
           </div>
         ) : null}
       </div>
