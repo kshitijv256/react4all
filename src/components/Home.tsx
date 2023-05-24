@@ -74,8 +74,8 @@ export default function Home(props: {
             >
               <h1 className="text-xl text-gray-800">{form.title}</h1>
               <div className="flex gap-2">
-                {props.currentUser.url ? (
-                  <div>
+                {props.currentUser.username !== "" ? (
+                  <div className="flex gap-2">
                     <Link
                       href={`/form/${form.id}`}
                       className="p-2 bg-cyan-500 rounded-lg text-white"
@@ -112,7 +112,7 @@ export default function Home(props: {
             </div>
           );
         })}
-      {props.currentUser.url ? (
+      {props.currentUser.username !== "" ? (
         <button
           onClick={(_) => setNewForm(true)}
           className="p-2 mt-4 bg-cyan-500 rounded-lg text-white text-lg font-semibold"

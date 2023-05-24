@@ -47,6 +47,16 @@ const updateTitle = async (id: number, title: string) => {
   }
 };
 
+const updatePublic = async (id: number, isPublic: boolean) => {
+  try {
+    let data = await getForm(id);
+    data.is_public = isPublic;
+    await updateForm(data, id);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 const addField = async (
   id: number,
   field: FormItem,
@@ -95,7 +105,7 @@ export default function FormUI(props: { id: number; currentUser: User }) {
   const [fields, setFields] = useState<FormItem[]>([]);
 
   useEffect(() => {
-    if (props.currentUser.url) {
+    if (props.currentUser.username !== "") {
       getFields(props.id, setFields);
       getTitle(props.id, setTitle);
     }
@@ -195,11 +205,11 @@ export default function FormUI(props: { id: number; currentUser: User }) {
     );
   };
 
-  if (!props.currentUser.url) {
+  if (props.currentUser.username === "") {
     return (
       <div className="flex flex-col gap-4 p-2 divide-y divide-double divide-gray-300">
         <div className="flex-1">
-          <h1>Unauthorized for this action</h1>
+          <h1 className="p-4 text-xl font-semibold text-red-600">Unauthorized for this action</h1>
         </div>
       </div>
     );
@@ -225,6 +235,14 @@ export default function FormUI(props: { id: number; currentUser: User }) {
           >
             {<img src={editIcon} alt="delete" className="w-8" />}
           </button>
+        </div>
+        <div className="py-1 flex gap-2">
+          <input type="checkbox" name="isPublic" id="isPublic" onChange={
+            (e) => {
+              updatePublic(props.id, e.target.checked);
+            }
+          }/>
+          <label htmlFor="isPublic">Is Public?</label>
         </div>
         <div className="flex flex-col gap-4 mt-4">
           <h2 className="font-semibold">Questions</h2>

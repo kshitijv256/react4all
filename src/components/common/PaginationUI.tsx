@@ -13,7 +13,7 @@ const fetchForms = async (
   setPageCB(forms);
 };
 
-export const PaginationUI = (currentUser:User) => {
+export const PaginationUI = (props: { currentUser: User }) => {
   const [offset, setOffset] = useState<number>(0);
   const [page, setPage] = useState<Pagination<Form>>({
     count: 0,
@@ -49,7 +49,7 @@ export const PaginationUI = (currentUser:User) => {
 
   return (
     <div className="flex flex-col w-full items-start justify-between border-t border-gray-200 bg-white px-4 py-2">
-        {/* {page!.results.map((form: Form) => (
+      {/* {page!.results.map((form: Form) => (
           <div key={form.id} className="flex items-center">
             <div className="ml-4">
               <div className="text-sm font-medium text-gray-900">
@@ -59,7 +59,15 @@ export const PaginationUI = (currentUser:User) => {
             </div>
           </div>
         ))} */}
-        {page ? <Home forms={page.results} updateFormsCB={updateForms} currentUser={currentUser} /> : ""}
+      {page ? (
+        <Home
+          forms={page.results}
+          updateFormsCB={updateForms}
+          currentUser={props.currentUser}
+        />
+      ) : (
+        ""
+      )}
       <div className="flex flex-1 justify-between sm:hidden w-full">
         {page!.previous ? (
           <button

@@ -10,7 +10,9 @@ const getCurrentUser = async (setCurrentUser: (value: User) => void) => {
   setCurrentUser(currentUser);
 };
 function App() {
-  const [currentUser, setCurrentUser] = useState<User>(null);
+  const [currentUser, setCurrentUser] = useState<User>({
+    username: "",
+  });
   useEffect(() => {
     getCurrentUser(setCurrentUser);
   }, []);

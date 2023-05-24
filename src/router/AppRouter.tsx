@@ -10,13 +10,13 @@ import { PaginationUI } from "../components/common/PaginationUI";
 import FormUI from "../components/FormUI";
 
 
-export default function AppRouter(currentuser: User) {
+export default function AppRouter(props: {currentUser: User}) {
 
   const routes = {
-    "/": () => <PaginationUI currentUser={currentuser}/>,
+    "/": () => <PaginationUI currentUser={props.currentUser}/>,
     "/login": () => <Login />,
     "/about": () => <About />,
-    "/form/:id": ({ id }: { id: string }) => <FormUI id={Number(id)} currentUser={currentuser} />,
+    "/form/:id": ({ id }: { id: string }) => <FormUI id={Number(id)} currentUser={props.currentUser} />,
     "/preview/:formId": ({ formId }: { formId: string }) => (
       <Preview formId={Number(formId)} />
     ),
