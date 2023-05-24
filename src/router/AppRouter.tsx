@@ -22,7 +22,7 @@ export default function AppRouter(props: {currentUser: User}) {
       <Preview formId={Number(formId)} />
     ),
     "/submission/:formId": ({ formId }: { formId: string }) => <PaginationSub form_pk={Number(formId)} currentUser={props.currentUser} />,
-    "/success": () => <div>Success</div>,
+    "/success": () => <div className="w-full text-center text-3xl p-10 font-bold text-green-500">Submitted Successfully</div>,
     "*": () => <NotFound />,
   };
 

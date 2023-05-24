@@ -5,6 +5,7 @@ import { listSubmissions } from "../../utils/apiUtils";
 import Home from "../Home";
 import { User } from "../../types/User";
 import Answer from "./Answer";
+import { navigate } from "raviger";
 
 const fetchSubmissions = async (
     form_pk: number,
@@ -36,14 +37,24 @@ export const PaginationSub = (props: { form_pk: number, currentUser: User }) => 
   };
 
   const handleNext = () => {
+    if (pageIndex === maxPage - 1) {
+      return;
+    }
+    setPageIndex(pageIndex + 1);
     setOffset(offset + 1);
-    fetchSubmissions(props.form_pk,offset, setPage);
   };
 
   const handlePrevious = () => {
+    if (pageIndex === 0) {
+      return;
+    }
+    setPageIndex(pageIndex - 1);
     setOffset(offset - 1);
-    fetchSubmissions(props.form_pk,offset, setPage);
   };
+
+  if (props.currentUser.username === "") {
+    navigate("/");
+  }
 
   return (
     <div className="flex flex-col w-full items-start justify-between border-t border-gray-200 bg-white px-4 py-2">
@@ -57,6 +68,9 @@ export const PaginationSub = (props: { form_pk: number, currentUser: User }) => 
             </div>
           </div>
         ))} */}
+        <div className="text-lg font-semibold text-gray-700">
+            Submissions
+        </div>
       {page ? (
         // <Answer submission={page.results}/>
         <div>

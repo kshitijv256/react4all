@@ -34,13 +34,19 @@ export const PaginationUI = (props: { currentUser: User }) => {
   };
 
   const handleNext = () => {
+    if (pageIndex === maxPage - 1) {
+      return;
+    }
+    setPageIndex(pageIndex + 1);
     setOffset(offset + 5);
-    fetchForms(offset, setPage);
   };
 
   const handlePrevious = () => {
+    if (pageIndex === 0) {
+      return;
+    }
+    setPageIndex(pageIndex - 1);
     setOffset(offset - 5);
-    fetchForms(offset, setPage);
   };
 
   const updateForms = () => {
