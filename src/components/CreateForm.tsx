@@ -21,7 +21,7 @@ export default function CreateForm() {
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
     } else {
-      try{
+      try {
         const data = await createForm(form);
         if (data) {
           console.log("Form created successfully");

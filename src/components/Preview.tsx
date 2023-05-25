@@ -54,7 +54,7 @@ const submitForm = async (form_pk: number, formState: FormItem[]) => {
     const response = await submitSubmission(form_pk, submission);
     console.log(response);
     return true;
-  } catch (err: any) {
+  } catch (err) {
     console.log(err);
     return false;
   }

@@ -96,11 +96,7 @@ export default function Home(props: {
                       href={`/submission/${form.id}`}
                       className="p-2 bg-cyan-500 rounded-lg text-white"
                     >
-                      <img
-                        src={searchIcon}
-                        alt="submissions"
-                        className="w-6"
-                      />
+                      <img src={searchIcon} alt="submissions" className="w-6" />
                     </Link>
                     <button
                       onClick={() => removeForm(form.id || 0)}

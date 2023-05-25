@@ -14,9 +14,6 @@ export default function InputLabel(props: {
     const newForm = { ...props.item, label: label };
     props.changedCB(newForm, props.id);
   };
-  const deleteField = () => {
-    props.removeFieldCB(props.id);
-  };
   return (
     <div className="flex flex-col gap-2">
       <div className="flex w-full gap-2">
