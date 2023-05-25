@@ -26,13 +26,13 @@ export default function InputLabel(props: {
           }}
         />
         <button
-          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+          className="bg-cyan-500 hover:bg-cyan-400 text-white p-2 rounded-md w-fit"
           onClick={(_) => updateLabel()}
         >
           {<img src={editIcon} alt="delete" className="w-8" />}
         </button>
         <button
-          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+          className="bg-cyan-500 hover:bg-cyan-400 text-white p-2 rounded-md w-fit"
           onClick={() => props.removeFieldCB(props.id)}
         >
           {<img src={deleteIcon} alt="delete" className="w-8" />}

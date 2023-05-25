@@ -243,12 +243,13 @@ export default function FormUI(props: { id: number; currentUser: User }) {
             className="border-2 rounded-lg border-gray-300 p-2 focus:border-cyan-500 focus:outline-none w-full mr-2"
           />
           <button
-            className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+            className="bg-cyan-500 hover:bg-cyan-400 text-white p-2 rounded-md w-fit"
             onClick={(_) => updateTitle(props.id, title)}
           >
             {<img src={editIcon} alt="delete" className="w-8" />}
           </button>
         </div>
+
         <div className="py-1 flex gap-2">
           <input
             type="checkbox"
@@ -292,7 +293,7 @@ export default function FormUI(props: { id: number; currentUser: User }) {
           </select>
         </div>
         <button
-          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+          className="bg-cyan-500 hover:bg-cyan-400 text-white p-2 rounded-md w-fit"
           onClick={(_) => {
             if (fieldValue === "") {
               console.log("Field value is empty");
@@ -306,9 +307,18 @@ export default function FormUI(props: { id: number; currentUser: User }) {
           Add Field
         </button>
       </div>
-      <div className="flex flex-row gap-2 pt-2">
-        <Link href="/" className="bg-cyan-500 text-white p-2 rounded-md w-fit">
+      <div className="flex flex-row gap-2 p-2">
+        <Link
+          href="/"
+          className="bg-cyan-500 hover:bg-cyan-400 text-white p-2 rounded-md w-fit"
+        >
           <img src={closeIcon} alt="delete" className="w-8" />
+        </Link>
+        <Link
+          href={`/share/${props.id}`}
+          className=" p-3 text-center bg-cyan-500 rounded-md text-white hover:bg-cyan-400"
+        >
+          Share Form
         </Link>
       </div>
     </div>

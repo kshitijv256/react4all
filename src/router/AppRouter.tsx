@@ -8,6 +8,7 @@ import { User } from "../types/User";
 import { PaginationUI } from "../components/common/PaginationUI";
 import FormUI from "../components/FormUI";
 import { PaginationSub } from "../components/common/PaginationSub";
+import ShareForm from "../components/common/ShareForm";
 
 export default function AppRouter(props: { currentUser: User }) {
   const routes = {
@@ -27,6 +28,9 @@ export default function AppRouter(props: { currentUser: User }) {
       <div className="w-full text-center text-3xl p-10 font-bold text-green-500">
         Submitted Successfully
       </div>
+    ),
+    "/share/:formId": ({ formId }: { formId: string }) => (
+      <ShareForm formID={Number(formId)} />
     ),
     "*": () => <NotFound />,
   };
