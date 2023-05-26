@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import MapPicker from "react-google-map-picker";
+import MapPicker from "../MapPicker/MapPicker";
 import { FormItem } from "../types/data";
 
 const DefaultLocation = { lat: 0, lng: 0 };
