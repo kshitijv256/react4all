@@ -165,6 +165,20 @@ export default function FormUI(props: { id: number; currentUser: User }) {
         placeholder: "",
       } as FormItem;
     }
+    if (type === "location") {
+      return {
+        kind: "GENERIC",
+        id: Number(new Date()),
+        label: fieldValue,
+        latitude: 0,
+        longitude: 0,
+        value: "",
+        placeholder: "",
+        meta: {
+          type: "location",
+        },
+      } as FormItem;
+    }
     return {
       kind: "TEXT",
       id: Number(new Date()),

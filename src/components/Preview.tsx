@@ -5,6 +5,7 @@ import { Link, navigate } from "raviger";
 import closeIcon from "../assets/close.svg";
 import RadioInput from "./RadioInput";
 import { getForm, getFormFields, submitSubmission } from "../utils/apiUtils";
+import LocationPicker from "./LocationPicker";
 
 // const saveForm = (newState: FormItem[], id: number) => {
 //   const forms = localStorage.getItem("forms") || "[]";
@@ -83,12 +84,24 @@ type SelectRadio = {
   formId: number;
 };
 
+type ChangeLocation = {
+  type: "CHANGE_LOCATION";
+  data: string;
+  id: number;
+  formId: number;
+};
+
 type InitializeAction = {
   type: "INITIALIZE";
   data: FormItem[];
 };
 
-type Actions = ChangeAction | SelectOption | SelectRadio | InitializeAction;
+type Actions =
+  | ChangeAction
+  | SelectOption
+  | SelectRadio
+  | InitializeAction
+  | ChangeLocation;
 
 type IncreaseIndex = {
   type: "INCREASE_INDEX";
@@ -175,6 +188,19 @@ const reducer = (state: FormItem[], action: Actions) => {
       // saveForm(newState, action.formId);
       return newState;
     }
+    case "CHANGE_LOCATION": {
+      const newState = state.map((field) => {
+        if (field.id === action.id) {
+          return {
+            ...field,
+            value: action.data,
+          };
+        } else {
+          return field;
+        }
+      });
+      return newState;
+    }
     case "INITIALIZE": {
       return action.data;
     }
@@ -242,6 +268,15 @@ export default function Preview(props: { formId: number }) {
     });
   };
 
+  const changeLocation = (value: string, id: number) => {
+    dispatch({
+      type: "CHANGE_LOCATION",
+      data: value,
+      id: id,
+      formId: props.formId,
+    });
+  };
+
   const handleChange = (value: string) => {
     dispatch({
       type: "CHANGE",
@@ -269,6 +304,9 @@ export default function Preview(props: { formId: number }) {
       );
     }
     if (field.kind === "GENERIC") {
+      if (field.meta) {
+        return <LocationPicker field={field} getValueCB={changeLocation} />;
+      }
       return (
         <div>
           <label className="text-sm font-semibold pt-2">
