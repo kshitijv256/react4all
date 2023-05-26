@@ -17,6 +17,10 @@ export default function About() {
           <li>
             Added <b>react-qr-code</b> package to generate QR code for link
           </li>
+          <li>
+            Added Location picker using <b>react-google-map-picker-custom</b>{" "}
+            package
+          </li>
         </ul>
       </div>
       <div className="text-lg">
