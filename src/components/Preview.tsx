@@ -7,21 +7,6 @@ import RadioInput from "./RadioInput";
 import { getForm, getFormFields, submitSubmission } from "../utils/apiUtils";
 import LocationPicker from "./LocationPicker";
 
-// const saveForm = (newState: FormItem[], id: number) => {
-//   const forms = localStorage.getItem("forms") || "[]";
-//   const newForms = JSON.parse(forms).map((form: MyForm) => {
-//     if (form.id === id) {
-//       return {
-//         ...form,
-//         fields: newState,
-//       };
-//     } else {
-//       return form;
-//     }
-//   });
-//   localStorage.setItem("forms", JSON.stringify(newForms));
-// };
-
 const fetchForms = async (id: number) => {
   const data = await getFormFields(id);
   return data.results;
@@ -52,8 +37,8 @@ const submitForm = async (form_pk: number, formState: FormItem[]) => {
   }
   try {
     const submission = await prepareSubmission(formState, form_pk);
-    const response = await submitSubmission(form_pk, submission);
-    console.log(response);
+    await submitSubmission(form_pk, submission);
+    // console.log(response);
     return true;
   } catch (err) {
     console.log(err);
@@ -323,19 +308,9 @@ export default function Preview(props: { formId: number }) {
       );
     }
     if (field.kind === "DROPDOWN") {
-      // if (field.options.length === 0) {
-      //   return (
-      //     <div className="text-lg text-center p-4">No options available.</div>
-      //   );
-      // }
       return <DropDown field={field} selectCB={selectOption} />;
     }
     if (field.kind === "RADIO") {
-      // if (field.options.length === 0) {
-      //   return (
-      //     <div className="text-lg text-center p-4">No options available.</div>
-      //   );
-      // }
       return <RadioInput field={field} selectCB={selectRadio} />;
     }
   };
