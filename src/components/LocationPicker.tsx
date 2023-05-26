@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FormItem } from "../types/data";
-import MapPicker from "../MapPicker";
+import MapPicker from "react-google-map-picker";
 
 const DefaultLocation = { lat: 0, lng: 0 };
 const DefaultZoom = 10;
