@@ -7,7 +7,7 @@ import { Link } from "raviger";
 
 export default function ShareForm(props: { formID: number }) {
   const [copied, setCopied] = useState(false);
-  const link: string = `localhost:3000/preview/${props.formID}`;
+  const link: string = `https://react-for-all.netlify.app/preview/${props.formID}`;
 
   const onCopy = () => {
     setCopied(true);

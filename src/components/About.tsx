@@ -5,22 +5,19 @@ export default function About() {
     <div className="flex flex-col gap-4 mt-4 text-gray-700">
       <div className="text-2xl font-bold">About</div>
       <div className="text-lg">
-        This is a submission for Level 8 of the React for All course.
+        This is a submission for Level 9 of the React for All course.
       </div>
       <div>
         New in this submission:
         <ul className="list-disc ml-6 list">
-          <li className="">Checked keyboard accessibilty of app</li>
           <li className="">
-            Added shareable link using <b>react-copy-to-clipboard</b> package
+            Added sentry for error reporting and performance monitoring
           </li>
           <li>
-            Added <b>react-qr-code</b> package to generate QR code for link
+            Added Location picker from source without installing{" "}
+            <b>react-google-map-picker-custom</b> package
           </li>
-          <li>
-            Added Location picker using <b>react-google-map-picker-custom</b>{" "}
-            package
-          </li>
+          <li>Deployed on Netlify</li>
         </ul>
       </div>
       <div className="text-lg">
