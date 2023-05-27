@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Pagination } from "../../types/common";
-import { Form, Submission } from "../../types/data";
+import { Submission } from "../../types/data";
 import { listSubmissions } from "../../utils/apiUtils";
-import Home from "../Home";
 import { User } from "../../types/User";
 import Answer from "./Answer";
 import { navigate } from "raviger";
 
 const fetchSubmissions = async (
-    form_pk: number,
+  form_pk: number,
   offset: number,
   setPageCB: (value: Pagination<Submission>) => void
 ) => {
-  const Submissions = await listSubmissions(form_pk, { limit: 1, offset: offset });
+  const Submissions = await listSubmissions(form_pk, {
+    limit: 1,
+    offset: offset,
+  });
   setPageCB(Submissions);
 };
 
-export const PaginationSub = (props: { form_pk: number, currentUser: User }) => {
+const PaginationSub = (props: { form_pk: number; currentUser: User }) => {
   const [offset, setOffset] = useState<number>(0);
   const [page, setPage] = useState<Pagination<Submission>>({
     count: 0,
@@ -28,8 +30,8 @@ export const PaginationSub = (props: { form_pk: number, currentUser: User }) => 
   const maxPage = Math.ceil(page!.count);
 
   useEffect(() => {
-    fetchSubmissions(props.form_pk,offset, setPage);
-  }, [offset]);
+    fetchSubmissions(props.form_pk, offset, setPage);
+  }, [props.form_pk, offset]);
 
   const changePage = (index: number) => {
     setPageIndex(index);
@@ -68,15 +70,17 @@ export const PaginationSub = (props: { form_pk: number, currentUser: User }) => 
             </div>
           </div>
         ))} */}
-        <div className="text-lg font-semibold text-gray-700">
-            Submissions
-        </div>
+      <div className="text-lg font-semibold text-gray-700">Submissions</div>
       {page ? (
         // <Answer submission={page.results}/>
         <div>
-            {page.results.map((submission: Submission) => (
-                <Answer key={submission.id} submission={submission} form_pk={props.form_pk}/>
-            ))}
+          {page.results.map((submission: Submission) => (
+            <Answer
+              key={submission.id}
+              submission={submission}
+              form_pk={props.form_pk}
+            />
+          ))}
         </div>
       ) : (
         ""
@@ -160,3 +164,5 @@ export const PaginationSub = (props: { form_pk: number, currentUser: User }) => 
     </div>
   );
 };
+
+export default PaginationSub;

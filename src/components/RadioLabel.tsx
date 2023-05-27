@@ -47,13 +47,13 @@ export default function RadioLabel(props: {
           }}
         />
         <button
-          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+          className="bg-cyan-500 hover:bg-cyan-400 text-white p-2 rounded-md w-fit"
           onClick={(_) => updateLabel()}
         >
           {<img src={editIcon} alt="delete" className="w-8" />}
         </button>
         <button
-          className="bg-cyan-500 text-white p-2 rounded-md w-fit"
+          className="bg-cyan-500 hover:bg-cyan-400 text-white p-2 rounded-md w-fit"
           onClick={(_) => props.removeFieldCB(props.id)}
         >
           {<img src={deleteIcon} alt="delete" className="w-8" />}
@@ -73,7 +73,7 @@ export default function RadioLabel(props: {
             {option}
           </div>
           <button
-            className="bg-cyan-500 text-white p-2 rounded-md"
+            className="bg-cyan-500 hover:bg-cyan-400 text-white p-2 rounded-md"
             onClick={(_) => removeOption(index)}
           >
             {<img src={trashIcon} alt="delete" className="w-8" />}
@@ -90,7 +90,7 @@ export default function RadioLabel(props: {
           }}
         />
         <button
-          className="bg-cyan-500 text-white p-2 rounded-md whitespace-nowrap"
+          className="bg-cyan-500 hover:bg-cyan-400 text-white p-2 rounded-md whitespace-nowrap"
           onClick={(_) => addOption(opText)}
         >
           {<img src={plusicon} alt="delete" className="w-8" />}

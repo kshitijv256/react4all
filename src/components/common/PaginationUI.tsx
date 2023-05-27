@@ -13,7 +13,7 @@ const fetchForms = async (
   setPageCB(forms);
 };
 
-export const PaginationUI = (props: { currentUser: User }) => {
+const PaginationUI = (props: { currentUser: User }) => {
   const [offset, setOffset] = useState<number>(0);
   const [page, setPage] = useState<Pagination<Form>>({
     count: 0,
@@ -153,3 +153,5 @@ export const PaginationUI = (props: { currentUser: User }) => {
     </div>
   );
 };
+
+export default PaginationUI;

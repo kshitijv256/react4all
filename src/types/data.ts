@@ -44,6 +44,7 @@ export type textField = {
   type: textFieldTypes;
   value: string;
   placeholder: string;
+  meta?: object;
 };
 
 export type DropDownField = {
@@ -53,6 +54,7 @@ export type DropDownField = {
   value: string;
   options: { selected: boolean; value: string }[];
   placeholder: string;
+  meta?: object;
 };
 
 export type RadioField = {
@@ -62,27 +64,37 @@ export type RadioField = {
   value: string;
   options: string[];
   placeholder: string;
+  meta?: object;
 };
 
 export type TextAreaField = {
   kind: "GENERIC";
+  type: "textarea";
   id: number;
   label: string;
   value: string;
   placeholder: string;
+  meta?: object;
 };
 
-export type SliderField = {
+export type LocationField = {
   kind: "GENERIC";
+  type: "location";
   id: number;
   label: string;
-  value: number;
-  min: number;
-  max: number;
-  step: number;
+  latitude: number;
+  longitude: number;
+  value: string;
+  placeholder: string;
+  meta?: object;
 };
 
-export type FormItem = textField | DropDownField | TextAreaField | RadioField;
+export type FormItem =
+  | textField
+  | DropDownField
+  | TextAreaField
+  | RadioField
+  | LocationField;
 
 // export const formItems: FormItem[] = [
 //   {
@@ -148,4 +160,5 @@ export const inputOptions = [
   { value: "textarea", label: "Textarea" },
   { value: "radio", label: "Radio" },
   { value: "dropdown", label: "Dropdown" },
+  { value: "location", label: "Location" },
 ];
