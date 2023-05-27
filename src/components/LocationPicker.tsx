@@ -63,7 +63,7 @@ export default function LocationPicker(props: {
         style={{ height: "400px" }}
         onChangeLocation={handleChangeLocation}
         onChangeZoom={handleChangeZoom}
-        apiKey="AIzaSyD07E1VvpsN_0FvsmKAj4nK9GnLq-9jtj8"
+        apiKey={process.env.REACT_APP_GOOGLE_API || ""}
       />
       <button
         className={`${
