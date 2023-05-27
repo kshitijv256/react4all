@@ -18,10 +18,7 @@ const fetchSubmissions = async (
   setPageCB(Submissions);
 };
 
-export const PaginationSub = (props: {
-  form_pk: number;
-  currentUser: User;
-}) => {
+const PaginationSub = (props: { form_pk: number; currentUser: User }) => {
   const [offset, setOffset] = useState<number>(0);
   const [page, setPage] = useState<Pagination<Submission>>({
     count: 0,
@@ -167,3 +164,5 @@ export const PaginationSub = (props: {
     </div>
   );
 };
+
+export default PaginationSub;
